@@ -1,6 +1,5 @@
-Running backend application: (@TODO: create docker-compose)
+Running backend application:
 ```
-docker run backend-image
-docker run -p 3030:3001 -it --rm --name backend backend-image
+sudo docker-compose up
 ```
 Open browser and go to `localhost:3030`. You can terminate application with Control+C.
