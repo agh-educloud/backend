@@ -3,11 +3,14 @@ services:
   mongo:
     image: 'mongo:latest'
     container_name: 'mongo'
+    # TODO user/password
+    # TODO init script
     ports:
       - '27100:27017'
   backend:
-    container_name: backend
-    image: 'backend:latest'
+    container_name: backend2_container
+    image: 'backend2'
     command: go run main.go
     ports:
       - "3001:3001"
+
