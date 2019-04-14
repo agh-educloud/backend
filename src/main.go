@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
  var PORT string
  if PORT = os.Getenv("PORT"); PORT == "" {
   PORT = "3001"
@@ -17,4 +18,12 @@ func main() {
  })
 
  _ = http.ListenAndServe(":"+PORT, nil)
+
+
+ //client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+ //
+ //ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+ //_ = client.Connect(ctx)
+
+
 }

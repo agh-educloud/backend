@@ -1,13 +1,16 @@
 version: '3'
 services:
+  mongo:
+    image: 'mongo:latest'
+    container_name: 'mongo'
+    ports:
+      - '27100:27017'
   backend:
     container_name: backend
-    build: .
+    image: 'backend_backend:latest'
     command: go run main.go
-    volumes:
+    volumes: # TODO TODO?
       - ./src:/go/src/app
     working_dir: /go/src/app
     ports:
-      - "3030:3001"
-    environment:
-      PORT: 3001
+      - "3001:3001"
