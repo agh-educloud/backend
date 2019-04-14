@@ -7,10 +7,7 @@ services:
       - '27100:27017'
   backend:
     container_name: backend
-    image: 'backend_backend:latest'
+    image: 'backend:latest'
     command: go run main.go
-    volumes: # TODO TODO?
-      - ./src:/go/src/app
-    working_dir: /go/src/app
     ports:
       - "3001:3001"

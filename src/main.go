@@ -1,9 +1,13 @@
 package main
 
 import (
+ "context"
  "fmt"
+ "go.mongodb.org/mongo-driver/mongo"
+ "go.mongodb.org/mongo-driver/mongo/options"
  "net/http"
  "os"
+ "time"
 )
 
 func main() {
@@ -19,11 +23,10 @@ func main() {
 
  _ = http.ListenAndServe(":"+PORT, nil)
 
+ client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
 
- //client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
- //
- //ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
- //_ = client.Connect(ctx)
+ ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+ _ = client.Connect(ctx)
 
 
 }
