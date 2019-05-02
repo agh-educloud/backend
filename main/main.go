@@ -7,20 +7,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
-	"os"
 	"net/http"
+	"os"
 	"time"
 )
 
-
 type User struct {
-	Id int
+	Id           int
 	OAuthService string
 }
 
-
 func main() {
-
 
 	client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://mongo:27017"))
 
@@ -31,11 +28,9 @@ func main() {
 
 	ctx, _ = context.WithTimeout(context.Background(), 5*time.Second)
 
-
 	FirstUser := User{11, "None"}
 
 	_, _ = collection.InsertOne(ctx, FirstUser)
-
 
 	filter := bson.M{}
 	ctx, _ = context.WithTimeout(context.Background(), 5*time.Second)
@@ -56,8 +51,5 @@ func main() {
 	})
 
 	_ = http.ListenAndServe(":"+PORT, nil)
-
-
-
 
 }

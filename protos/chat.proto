@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "protos/user.proto";
+
+service Chat {
+    rpc ExchangeMessages (stream ChatMessage) returns (stream ChatMessage)
+}
+
+message ChatMessage {
+    string messageContent = 1;
+    string timeStamp = 2;
+    User sender = 3;
+}
