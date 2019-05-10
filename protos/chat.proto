@@ -7,7 +7,11 @@ service Chat {
 }
 
 message ChatMessage {
-    string messageContent = 1;
+    User sender = 1;
+    Message message = 2;
+}
+
+message Message {
+    string content = 1;
     string timeStamp = 2;
-    User sender = 3;
 }

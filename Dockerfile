@@ -6,7 +6,7 @@ RUN mkdir /go/src/app
 
 RUN go get -u github.com/golang/dep/cmd/dep
 
-ADD ./src/main.go /go/src/app
+ADD main /go/src/app
 
 WORKDIR /go/src/app
 
