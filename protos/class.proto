@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "protos/user.proto";
+import "protos/status.proto";
+
+service Class {
+    rpc CreateClass (ClassCreationRequest) returns (Code)
+    rpc JoinClass (ClassJoinRequest) returns (Status)
+}
+
+message ClassCreationRequest {
+    string name = 1;
+    string topic = 2;
+}
+
+message Code {
+    int32 code = 1;
+}
+
+message ClassJoinRequest {
+    Code code = 1;
+    User user = 2;
+}
