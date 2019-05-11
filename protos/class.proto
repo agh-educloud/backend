@@ -2,10 +2,12 @@ syntax = "proto3";
 
 import "protos/user.proto";
 import "protos/status.proto";
+import "protos/chat.proto";
 
 service Class {
-    rpc CreateClass (ClassCreationRequest) returns (Code)
-    rpc JoinClass (ClassJoinRequest) returns (Status)
+    rpc CreateClass (ClassCreationRequest) returns (SecretCode);
+    rpc JoinClass (ClassJoinRequest) returns (Status);
+    rpc SendMessageToProfessor (ChatMessage) returns (Status);
 }
 
 message ClassCreationRequest {
@@ -13,11 +15,11 @@ message ClassCreationRequest {
     string topic = 2;
 }
 
-message Code {
+message SecretCode {
     int32 code = 1;
 }
 
 message ClassJoinRequest {
-    Code code = 1;
+    SecretCode code = 1;
     User user = 2;
 }
