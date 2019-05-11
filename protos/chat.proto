@@ -1,9 +1,11 @@
 syntax = "proto3";
 
 import "protos/user.proto";
+import "google/protobuf/timestamp.proto";
 
 service Chat {
-    rpc ExchangeMessages (stream ChatMessage) returns (stream ChatMessage)
+    rpc ExchangeMessages (stream ChatMessage) returns (stream ChatMessage) {
+    }
 }
 
 message ChatMessage {
@@ -13,5 +15,5 @@ message ChatMessage {
 
 message Message {
     string content = 1;
-    string timeStamp = 2;
+    google.protobuf.Timestamp timeStamp = 2;
 }
