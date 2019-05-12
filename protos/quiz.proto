@@ -1,4 +1,35 @@
 syntax = "proto3";
 
-message ClassQuizQuestion {
+import "protos/status.proto";
+
+message QuizQuestion {
+    int32 uuid = 1;
+    string question = 2;
+    string hint = 3;
+    repeated Option option = 4;
+}
+
+message Option {
+    string value = 1;
+}
+
+message QuizQuestionCreation {
+    QuizQuestion quizQuestion = 1;
+    Option answer = 2;
+}
+
+message QuizQuestionAnswer {
+    int32 uuid = 1;
+    Option answer = 2;
+}
+
+message QuizQuestionResponse {
+    int32 questionUuid = 1;
+    Option correctAnswer = 2;
+}
+
+message QuizQuestionStatistics{
+    int32 questionUuid = 1;
+    float goodAnswerPercent = 2;
+    int32 participants = 3;
 }
