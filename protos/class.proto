@@ -1,25 +1,44 @@
 syntax = "proto3";
 
 import "protos/user.proto";
-import "protos/status.proto";
 import "protos/chat.proto";
+import "protos/error.proto";
+import "protos/quiz.proto";
 
-service Class {
-    rpc CreateClass (ClassCreationRequest) returns (SecretCode);
-    rpc JoinClass (ClassJoinRequest) returns (Status);
-    rpc SendMessageToProfessor (ChatMessage) returns (Status);
+service PresenterClassService {
+    rpc CreateClass (ClassCreationRequest) returns (Error);
+    rpc UpdateClass (ClassUpdateRequest) returns (Error);
+    rpc DeleteClass (ClassDeleteRequest) returns (Error);
+
+    rpc StartClass (ClassStartRequest) returns (Error);
+    rpc DelegateQuizQuestion (ClassQuizQuestion) returns (Error);
+    rpc EndClass (ClassEndRequest) returns (Error);
 }
 
+service StudentClassService {
+    rpc JoinClass(JoinClassRequest) returns (stream ClassEvent);
+    rpc SendMessageToPresenter(StudentMessage) returns (Error);
+}
+
+// TODO
 message ClassCreationRequest {
-    string name = 1;
-    string topic = 2;
+}
+message ClassUpdateRequest {
+}
+message ClassDeleteRequest {
+}
+message ClassStartRequest {
+}
+message ClassEndRequest {
+}
+message ClassEvent{
+    // example
+    repeated ClassQuizQuestion classQuizQuestion = 1;
+}
+message StudentMessage{
 }
 
-message SecretCode {
-    int32 code = 1;
+message JoinClassRequest {
 }
 
-message ClassJoinRequest {
-    SecretCode code = 1;
-    User user = 2;
-}
+
