@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-import "protos/user.proto";
 import "google/protobuf/timestamp.proto";
+import "protos/user.proto";
 
-service Chat {
+service ChatService {
     rpc ExchangeMessages (stream ChatMessage) returns (stream ChatMessage);
 }
 

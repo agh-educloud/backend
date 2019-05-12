@@ -1,4 +1,7 @@
 #!/bin/bash
 
-protoc protos/user.proto  --go_out=plugins=grpc:generated
-protoc protos/chat.proto  --go_out=plugins=grpc:generated
+mkdir -p generated
+
+for filename in protos/*.proto; do
+    protoc protos/${filename##*/} --go_out=plugins=grpc:generated
+done
