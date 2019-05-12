@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-// TODO to elaborate
-message Error {
-    string message = 1;
-    int32 code = 2;
-    repeated string details = 4;
-}
