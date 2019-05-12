@@ -6,7 +6,7 @@ import "protos/chat.proto";
 import "protos/user.proto";
 
 service PresenterClassService {
-    rpc CreateClass (ClassCreationRequest) returns (ClassCreationCallback);
+    rpc CreateClass (ClassCreationRequest) returns (ClassCreationResponse);
     rpc UpdateClass (ClassUpdateRequest) returns (Status);
     rpc DeleteClass (ClassDeleteRequest) returns (Status);
 
@@ -31,7 +31,7 @@ message ClassCreationRequest {
     Class class = 1;
 }
 
-message ClassCreationCallback {
+message ClassCreationResponse {
     int32 classUuid = 1;
     int32 secretCode = 2;
     Status error = 3;
@@ -62,5 +62,3 @@ message JoinClassRequest {
     int32 secretCode = 1;
     User user = 2;
 }
-
-

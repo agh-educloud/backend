@@ -8,7 +8,7 @@ service ChatService {
 }
 
 message ChatMessage {
-    User  sender = 1;
+    User sender = 1;
     Message message = 2;
 }
 
