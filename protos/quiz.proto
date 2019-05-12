@@ -30,6 +30,6 @@ message QuizQuestionResponse {
 
 message QuizQuestionStatistics{
     int32 questionUuid = 1;
-    float goodAnswerPercent = 2;
+    float percentageOfCorrectAnswers = 2;
     int32 participants = 3;
 }
