@@ -1,44 +1,66 @@
 syntax = "proto3";
 
-import "protos/user.proto";
-import "protos/chat.proto";
-import "protos/error.proto";
+import "protos/status.proto";
 import "protos/quiz.proto";
+import "protos/chat.proto";
+import "protos/user.proto";
 
 service PresenterClassService {
-    rpc CreateClass (ClassCreationRequest) returns (Error);
-    rpc UpdateClass (ClassUpdateRequest) returns (Error);
-    rpc DeleteClass (ClassDeleteRequest) returns (Error);
+    rpc CreateClass (ClassCreationRequest) returns (ClassCreationCallback);
+    rpc UpdateClass (ClassUpdateRequest) returns (Status);
+    rpc DeleteClass (ClassDeleteRequest) returns (Status);
 
-    rpc StartClass (ClassStartRequest) returns (Error);
-    rpc DelegateQuizQuestion (ClassQuizQuestion) returns (Error);
-    rpc EndClass (ClassEndRequest) returns (Error);
+    rpc StartClass (ClassStartRequest) returns (stream ChatMessage);
+    rpc DelegateQuizQuestion (ClassEvent) returns (Status);
+    rpc EndClass (ClassEndRequest) returns (Status);
 }
 
 service StudentClassService {
-    rpc JoinClass(JoinClassRequest) returns (stream ClassEvent);
-    rpc SendMessageToPresenter(StudentMessage) returns (Error);
+    rpc JoinClass (JoinClassRequest) returns (stream ClassEvent);
+    rpc SendMessageToPresenter (ChatMessage) returns (Status);
 }
 
-// TODO
+message Class {
+    string name = 1;
+    string topic = 2;
+    repeated ClassQuizQuestion classQuizQuestion = 3;
+    bytes presentation = 4;
+}
+
 message ClassCreationRequest {
+    Class class = 1;
 }
+
+message ClassCreationCallback {
+    int32 classUuid = 1;
+    int32 secretCode = 2;
+    Status error = 3;
+}
+
 message ClassUpdateRequest {
+    int32 classUuid = 1;
+    Class class = 2;
 }
+
 message ClassDeleteRequest {
+    int32 classUuid = 1;
 }
+
 message ClassStartRequest {
+    int32 classUuid = 1;
 }
+
 message ClassEndRequest {
+    int32 classUuid = 1;
 }
-message ClassEvent{
-    // example
+
+message ClassEvent {
     repeated ClassQuizQuestion classQuizQuestion = 1;
-}
-message StudentMessage{
 }
 
 message JoinClassRequest {
+    int32 secretCode = 1;
+    User user = 2;
 }
 
 
