@@ -1,7 +1,15 @@
 syntax = "proto3";
 
 import "protos/status.proto";
-import "protos/user.proto";
+
+service PresenterQuizService{
+    rpc DelegateQuizQuestion (QuizQuestion) returns (Status);
+    rpc GetQuizQuestionStatistics (QuizQuestion) returns (stream QuizQuestionStatistics);
+}
+
+service StudentQuizService {
+    rpc AnswerQuizQuestion (QuizQuestionAnswer) returns (QuizQuestionResponse);
+}
 
 message QuizQuestion {
     int32 uuid = 1;
@@ -35,16 +43,3 @@ message QuizQuestionStatistics{
     int32 participants = 3;
 }
 
-service PresenterQuizService{
-    rpc DelegateQuizQuestion (QuizQuestion) returns (Status);
-    rpc GetQuizQuestionStatistics (QuizQuestion) returns (stream QuizQuestionStatistics);
-}
-
-service StudentQuizService {
-    rpc JoinQuiz (JoinQuizRequest) returns (stream QuizQuestion);
-    rpc AnswerQuizQuestion (QuizQuestionAnswer) returns (QuizQuestionResponse);
-}
-
-message JoinQuizRequest {
-    User user = 1;
-}
