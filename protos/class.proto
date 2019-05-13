@@ -11,19 +11,18 @@ service PresenterClassService {
     rpc DeleteClass (ClassDeleteRequest) returns (Status);
 
     rpc StartClass (ClassStartRequest) returns (stream ChatMessage);
-    rpc DelegateQuizQuestion (ClassEvent) returns (Status);
     rpc EndClass (ClassEndRequest) returns (Status);
 }
 
 service StudentClassService {
-    rpc JoinClass (JoinClassRequest) returns (stream ClassEvent);
+    rpc JoinClass (JoinClassRequest) returns (Status);
     rpc SendMessageToPresenter (ChatMessage) returns (Status);
 }
 
 message Class {
     string name = 1;
     string topic = 2;
-    repeated ClassQuizQuestion classQuizQuestion = 3;
+    repeated QuizQuestion quizQuestion = 3;
     bytes presentation = 4;
 }
 
@@ -52,10 +51,6 @@ message ClassStartRequest {
 
 message ClassEndRequest {
     int32 classUuid = 1;
-}
-
-message ClassEvent {
-    repeated ClassQuizQuestion classQuizQuestion = 1;
 }
 
 message JoinClassRequest {
