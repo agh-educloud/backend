@@ -17,7 +17,7 @@ service PresenterClassService {
 
 service StudentClassService {
     rpc JoinClass (JoinClassRequest) returns (Status);
-    rpc JoinEventLoop(JoinEventLoopRequest) returns (stream Event);
+    rpc JoinAssigmentLoop(JoinAssigmentLoopRequest) returns (stream Assigment);
     rpc SendMessageToPresenter (ChatMessage) returns (Status);
 }
 
@@ -61,14 +61,14 @@ message JoinClassRequest {
     User user = 2;
 }
 
-message Event {
+message Assigment {
     oneof event {
         QuizQuestion quizQuestion = 1;
         Homework homework = 2;
     }
 }
 
-message JoinEventLoopRequest{
+message JoinAssigmentLoopRequest{
     User user = 1;
 }
 

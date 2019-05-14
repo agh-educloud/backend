@@ -11,13 +11,33 @@ service PresenterHomeworkService {
 }
 
 service StudentHomeworkService {
-    rpc SendHomeWorkSolution (HomeworkSolution) returns (Status);
+    rpc SendHomeworkSolution (HomeworkSolution) returns (Status);
 }
 
 message Homework {
     int32 homeworkUuid = 1;
-    string content = 2;
-    bytes photo = 3;
+    oneof homeworkInstruction {
+        Document document = 2;
+        Photo photo = 3;
+    }
+}
+
+message Document {
+    enum DocumentType{
+        DOC = 0;
+        PDF = 1;
+    }
+    DocumentType documentType = 1;
+    bytes document = 2;
+}
+
+message Photo {
+    enum PhotoFormat{
+        JPG = 0;
+        PNG = 1;
+    }
+    PhotoFormat photoFormat = 1;
+    bytes Photo = 2;
 }
 
 message CreateHomeworkRequest {
@@ -42,6 +62,9 @@ message DeleteHomeworkRequest {
 }
 
 message HomeworkSolution {
-    Homework homework = 1;
-    bytes photoOfSolution = 2;
+    int32 homeworkUuid = 1;
+    oneof homeworkSolution {
+        Document document = 2;
+        Photo photo = 3;
+    }
 }
