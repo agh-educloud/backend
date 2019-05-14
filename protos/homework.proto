@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+import "protos/status.proto";
+
+service PresenterHomeworkService {
+    rpc CreateHomework (CreateHomeworkRequest) returns (CreateHomeworkResponse);
+    rpc UpdateHomework (UpdateHomeworkRequest) returns (Status);
+    rpc DeleteHomework (DeleteHomeworkRequest) returns (Status);
+
+    rpc DelegateHomework (Homework) returns (Status);
+}
+
+service StudentHomeworkService {
+    rpc SendHomeworkSolution (HomeworkSolution) returns (Status);
+}
+
+message Homework {
+    int32 homeworkUuid = 1;
+    oneof homeworkInstruction {
+        Document document = 2;
+        Photo photo = 3;
+    }
+}
+
+message Document {
+    enum DocumentType{
+        DOC = 0;
+        PDF = 1;
+    }
+    DocumentType documentType = 1;
+    bytes document = 2;
+}
+
+message Photo {
+    enum PhotoFormat{
+        JPG = 0;
+        PNG = 1;
+    }
+    PhotoFormat photoFormat = 1;
+    bytes Photo = 2;
+}
+
+message CreateHomeworkRequest {
+    int32 classUuid = 1;
+    Homework homework = 2;
+}
+
+message CreateHomeworkResponse{
+    Status status = 1;
+    int32 homeworkUuid = 2;
+}
+
+message UpdateHomeworkRequest {
+    int32 classUuid = 1;
+    int32 homeworkUuid = 2;
+    Homework homework = 3;
+}
+
+message DeleteHomeworkRequest {
+    int32 classUuid = 1;
+    int32 homeworkUuid = 2;
+}
+
+message HomeworkSolution {
+    int32 homeworkUuid = 1;
+    oneof homeworkSolution {
+        Document document = 2;
+        Photo photo = 3;
+    }
+}

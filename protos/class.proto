@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "protos/status.proto";
 import "protos/quiz.proto";
+import "protos/homework.proto";
 import "protos/chat.proto";
 import "protos/user.proto";
 
@@ -16,6 +17,7 @@ service PresenterClassService {
 
 service StudentClassService {
     rpc JoinClass (JoinClassRequest) returns (Status);
+    rpc JoinAssigmentLoop(JoinAssigmentLoopRequest) returns (stream Assigment);
     rpc SendMessageToPresenter (ChatMessage) returns (Status);
 }
 
@@ -23,7 +25,8 @@ message Class {
     string name = 1;
     string topic = 2;
     repeated QuizQuestion quizQuestion = 3;
-    bytes presentation = 4;
+    repeated Homework homework = 4;
+    bytes presentation = 5;
 }
 
 message ClassCreationRequest {
@@ -57,3 +60,15 @@ message JoinClassRequest {
     int32 secretCode = 1;
     User user = 2;
 }
+
+message Assigment {
+    oneof event {
+        QuizQuestion quizQuestion = 1;
+        Homework homework = 2;
+    }
+}
+
+message JoinAssigmentLoopRequest{
+    User user = 1;
+}
+
