@@ -10,7 +10,7 @@ service PresenterHomeworkService {
     rpc DelegateHomework (Homework) returns (Status);
 }
 
-service StudentHomeworkService {
+service UserHomeworkService {
     rpc SendHomeworkSolution (HomeworkSolution) returns (Status);
 }
 
