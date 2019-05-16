@@ -2,29 +2,24 @@ FROM golang:latest
 
 LABEL version="1.0"
 
-RUN mkdir /go/src/app
-
-#Downloading dep and protoc
-RUN go get -u github.com/golang/dep/cmd/dep
-RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip
-RUN apt-get update
-RUN apt-get install unzip
-RUN unzip protoc-3.6.1-linux-x86_64.zip -d protoc3
-RUN mv protoc3/bin/* /usr/local/bin/
-RUN mv protoc3/include/* /usr/local/include/
-RUN rm -rf protoc-3.6.1-linux-x86_64.zip -d protoc3
-RUN go get -u github.com/golang/protobuf/protoc-gen-go
-
 #Copy files
-COPY main /go/src/app
+COPY main /go/src/app/main
+COPY .env /go/src/app
 COPY protos /go/src/app/protos
-COPY generate_go_code.sh /go/src/app
+COPY utils /go/src/app/utils
 
 WORKDIR /go/src/app
 
+#Enviroment
+USER root
+RUN chmod -R +x utils
+RUN utils/set_up_enviroment.sh
+
 #Build
+RUN utils/generate_go_code.sh
 RUN dep init
-RUN ./generate_go_code.sh
+
+WORKDIR /go/src/app/main
 RUN go build
 
 CMD ["./app"]

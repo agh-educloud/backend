@@ -1,16 +1,19 @@
 version: '3'
 services:
+
   mongo:
-    image: 'mongo:latest'
-    container_name: 'mongo'
-    # TODO user/password
-    # TODO init script
-    ports:
-      - '27100:27017'
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+
   backend:
     build: .
     container_name: backend_container
     image: 'backend'
+    depends_on:
+      - mongo
     command: go run main.go
     ports:
       - "3001:3001"

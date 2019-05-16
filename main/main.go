@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/subosito/gotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -17,24 +18,34 @@ type User struct {
 	OAuthService string
 }
 
+func init() {
+	err := gotenv.Load("./../.env")
+	if err != nil {
+		panic("Error loading .env!")
+	}
+}
+
 func main() {
 
-	client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://mongo:27017"))
+	uri := BuildUri();
+	client, _ := mongo.NewClient(options.Client().ApplyURI(uri))
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_ = client.Connect(ctx)
 
-	collection := client.Database("test").Collection("users")
+	collection := client.Database(os.Getenv("MONGO_DATABASE")).Collection(os.Getenv("MONGO_DATABASE_COLLECTION"))
 
 	ctx, _ = context.WithTimeout(context.Background(), 5*time.Second)
 
-	FirstUser := User{11, "None"}
+	// Insert Example user
+	FirstUser := User{1, "None"}
 
 	_, _ = collection.InsertOne(ctx, FirstUser)
 
 	filter := bson.M{}
 	ctx, _ = context.WithTimeout(context.Background(), 5*time.Second)
 
+	// Find inserted user
 	result := User{}
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
@@ -52,4 +63,8 @@ func main() {
 
 	_ = http.ListenAndServe(":"+PORT, nil)
 
+}
+
+func BuildUri() string {
+	return "mongodb://" + os.Getenv("MONGO_ROOT_USERNAME") + ":" + os.Getenv("MONGO_ROOT_PASSWORD") + "@mongo:27017"
 }
