@@ -5,6 +5,8 @@ import "protos/quiz.proto";
 import "protos/homework.proto";
 import "protos/chat.proto";
 import "protos/user.proto";
+import "protos/feedback.proto";
+
 
 service PresenterClassService {
     rpc CreateClass (ClassCreationRequest) returns (ClassCreationResponse);
@@ -15,10 +17,11 @@ service PresenterClassService {
     rpc EndClass (ClassEndRequest) returns (Status);
 }
 
-service StudentClassService {
+service UserClassService {
     rpc JoinClass (JoinClassRequest) returns (Status);
     rpc JoinAssigmentLoop(JoinAssigmentLoopRequest) returns (stream Assigment);
     rpc SendMessageToPresenter (ChatMessage) returns (Status);
+    rpc SendFeedback (Feedback) returns (Status);
 }
 
 message Class {

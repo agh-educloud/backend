@@ -7,7 +7,7 @@ service PresenterQuizService{
     rpc GetQuizQuestionStatistics (QuizQuestion) returns (stream QuizQuestionStatistics);
 }
 
-service StudentQuizService {
+service UserQuizService {
     rpc AnswerQuizQuestion (QuizQuestionAnswer) returns (QuizQuestionResponse);
 }
 
