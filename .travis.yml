@@ -4,4 +4,8 @@ services:
   - docker
 
 script:
-  - docker-compose up
+  - docker-compose build
+
+after_script:
+  - docker-compose stop
+  - docker-compose rm -f
