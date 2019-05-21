@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "backend";
+
 message User {
     string uuid = 1;
     string name = 2;

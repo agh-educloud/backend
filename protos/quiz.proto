@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "backend";
+
 import "protos/status.proto";
 
 service PresenterQuizService{
