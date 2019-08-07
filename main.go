@@ -1,8 +1,8 @@
 package main
 
 import (
-	"../webAuth"
 	"fmt"
+	"github.com/agh-eduweb/webAuth"
 	"log"
 	"net/http"
 )
@@ -27,8 +27,4 @@ func main() {
 		log.Println("Server closed!")
 	}
 
-}
-
-func BuildUri() string {
-	return "mongodb://" + os.Getenv("MONGO_ROOT_USERNAME") + ":" + os.Getenv("MONGO_ROOT_PASSWORD") + "@mongo:27017"
 }
