@@ -2,42 +2,49 @@ package chat
 
 import (
 	. "../generated/protos"
+	"context"
 	"google.golang.org/grpc"
-	"io"
 	"log"
 	"net"
 	"sync"
 )
 
-var streams = make([]ChatService_ExchangeMessagesServer, 0)
+var streams = make(map[*User]ChatService_ReceiveMessagesServer)
+var finished = false
 var mutex = &sync.Mutex{}
 
 type chatServiceServer struct{}
 
-func (s *chatServiceServer) ExchangeMessages(stream ChatService_ExchangeMessagesServer) error {
+func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessage) (*Status, error) {
+	println("Got request")
+	for user, stream := range streams {
+		println(user.Uuid)
+		//if user.Uuid != message.Sender.Uuid {
+		if stream != nil {
+			if err := stream.Send(message); err != nil {
+				return &Status{Code: Status_DENIED, Message: "Error", Details: "Error"}, err
+			}
+		}
+		println("SENT", user.Name, stream)
+		//} else {
+		//	println("Same uuid")
+		//}
+	}
 
+	return &Status{Code: Status_OK, Message: "Sent", Details: "XD"}, nil
+}
+
+func (s *chatServiceServer) ReceiveMessages(user *User, stream ChatService_ReceiveMessagesServer) error {
 	mutex.Lock()
-	streams = append(streams, stream)
+	streams[user] = stream
 	mutex.Unlock()
 
 	for {
-		in, err := stream.Recv()
-		if err == io.EOF {
+		if finished {
 			break
-		} else if err != nil {
-			return err
 		}
-
-		for _, streamFromSlice := range streams {
-			if streamFromSlice != nil {
-				if err := streamFromSlice.Send(in); err != nil {
-					return err
-				}
-			}
-
-		}
-
 	}
+
 	return nil
 }
 

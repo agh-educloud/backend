@@ -2,7 +2,6 @@ package main
 
 import (
 	"../chat"
-	"os"
 )
 
 type User struct {
@@ -56,8 +55,4 @@ func main() {
 	//
 	//_ = http.ListenAndServe(":"+PORT, nil)
 
-}
-
-func BuildUri() string {
-	return "mongodb://" + os.Getenv("MONGO_ROOT_USERNAME") + ":" + os.Getenv("MONGO_ROOT_PASSWORD") + "@mongo:27017"
 }
