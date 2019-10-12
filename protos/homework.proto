@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "educloud";
+
 import "protos/status.proto";
 
 service PresenterHomeworkService {
