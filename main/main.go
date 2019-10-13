@@ -2,6 +2,7 @@ package main
 
 import (
 	"../chat"
+	"../homework"
 )
 
 type User struct {
@@ -17,6 +18,7 @@ type User struct {
 //}
 
 func main() {
+	go homework.StartServer()
 	chat.StartServer()
 
 	//uri := BuildUri()

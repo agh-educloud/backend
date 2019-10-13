@@ -24,65 +24,12 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type Document_DocumentType int32
-
-const (
-	Document_DOC Document_DocumentType = 0
-	Document_PDF Document_DocumentType = 1
-)
-
-var Document_DocumentType_name = map[int32]string{
-	0: "DOC",
-	1: "PDF",
-}
-
-var Document_DocumentType_value = map[string]int32{
-	"DOC": 0,
-	"PDF": 1,
-}
-
-func (x Document_DocumentType) String() string {
-	return proto.EnumName(Document_DocumentType_name, int32(x))
-}
-
-func (Document_DocumentType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{1, 0}
-}
-
-type Photo_PhotoFormat int32
-
-const (
-	Photo_JPG Photo_PhotoFormat = 0
-	Photo_PNG Photo_PhotoFormat = 1
-)
-
-var Photo_PhotoFormat_name = map[int32]string{
-	0: "JPG",
-	1: "PNG",
-}
-
-var Photo_PhotoFormat_value = map[string]int32{
-	"JPG": 0,
-	"PNG": 1,
-}
-
-func (x Photo_PhotoFormat) String() string {
-	return proto.EnumName(Photo_PhotoFormat_name, int32(x))
-}
-
-func (Photo_PhotoFormat) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{2, 0}
-}
-
 type Homework struct {
-	HomeworkUuid int32 `protobuf:"varint,1,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
-	// Types that are valid to be assigned to HomeworkInstruction:
-	//	*Homework_Document
-	//	*Homework_Photo
-	HomeworkInstruction  isHomework_HomeworkInstruction `protobuf_oneof:"homeworkInstruction"`
-	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
-	XXX_unrecognized     []byte                         `json:"-"`
-	XXX_sizecache        int32                          `json:"-"`
+	HomeworkUuid         int32    `protobuf:"varint,1,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
+	Url                  string   `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *Homework) Reset()         { *m = Homework{} }
@@ -117,478 +64,76 @@ func (m *Homework) GetHomeworkUuid() int32 {
 	return 0
 }
 
-type isHomework_HomeworkInstruction interface {
-	isHomework_HomeworkInstruction()
-}
-
-type Homework_Document struct {
-	Document *Document `protobuf:"bytes,2,opt,name=document,proto3,oneof"`
-}
-
-type Homework_Photo struct {
-	Photo *Photo `protobuf:"bytes,3,opt,name=photo,proto3,oneof"`
-}
-
-func (*Homework_Document) isHomework_HomeworkInstruction() {}
-
-func (*Homework_Photo) isHomework_HomeworkInstruction() {}
-
-func (m *Homework) GetHomeworkInstruction() isHomework_HomeworkInstruction {
+func (m *Homework) GetUrl() string {
 	if m != nil {
-		return m.HomeworkInstruction
+		return m.Url
 	}
-	return nil
+	return ""
 }
 
-func (m *Homework) GetDocument() *Document {
-	if x, ok := m.GetHomeworkInstruction().(*Homework_Document); ok {
-		return x.Document
-	}
-	return nil
+type Homeworks struct {
+	Homework             []*Homework `protobuf:"bytes,1,rep,name=homework,proto3" json:"homework,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *Homework) GetPhoto() *Photo {
-	if x, ok := m.GetHomeworkInstruction().(*Homework_Photo); ok {
-		return x.Photo
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*Homework) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*Homework_Document)(nil),
-		(*Homework_Photo)(nil),
-	}
-}
-
-type Document struct {
-	DocumentType         Document_DocumentType `protobuf:"varint,1,opt,name=documentType,proto3,enum=Document_DocumentType" json:"documentType,omitempty"`
-	Document             []byte                `protobuf:"bytes,2,opt,name=document,proto3" json:"document,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
-}
-
-func (m *Document) Reset()         { *m = Document{} }
-func (m *Document) String() string { return proto.CompactTextString(m) }
-func (*Document) ProtoMessage()    {}
-func (*Document) Descriptor() ([]byte, []int) {
+func (m *Homeworks) Reset()         { *m = Homeworks{} }
+func (m *Homeworks) String() string { return proto.CompactTextString(m) }
+func (*Homeworks) ProtoMessage()    {}
+func (*Homeworks) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2ffa1a0a834cde22, []int{1}
 }
 
-func (m *Document) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Document.Unmarshal(m, b)
+func (m *Homeworks) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Homeworks.Unmarshal(m, b)
 }
-func (m *Document) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Document.Marshal(b, m, deterministic)
+func (m *Homeworks) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Homeworks.Marshal(b, m, deterministic)
 }
-func (m *Document) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Document.Merge(m, src)
+func (m *Homeworks) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Homeworks.Merge(m, src)
 }
-func (m *Document) XXX_Size() int {
-	return xxx_messageInfo_Document.Size(m)
+func (m *Homeworks) XXX_Size() int {
+	return xxx_messageInfo_Homeworks.Size(m)
 }
-func (m *Document) XXX_DiscardUnknown() {
-	xxx_messageInfo_Document.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Document proto.InternalMessageInfo
-
-func (m *Document) GetDocumentType() Document_DocumentType {
-	if m != nil {
-		return m.DocumentType
-	}
-	return Document_DOC
+func (m *Homeworks) XXX_DiscardUnknown() {
+	xxx_messageInfo_Homeworks.DiscardUnknown(m)
 }
 
-func (m *Document) GetDocument() []byte {
-	if m != nil {
-		return m.Document
-	}
-	return nil
-}
+var xxx_messageInfo_Homeworks proto.InternalMessageInfo
 
-type Photo struct {
-	PhotoFormat          Photo_PhotoFormat `protobuf:"varint,1,opt,name=photoFormat,proto3,enum=Photo_PhotoFormat" json:"photoFormat,omitempty"`
-	Photo                []byte            `protobuf:"bytes,2,opt,name=Photo,proto3" json:"Photo,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
-}
-
-func (m *Photo) Reset()         { *m = Photo{} }
-func (m *Photo) String() string { return proto.CompactTextString(m) }
-func (*Photo) ProtoMessage()    {}
-func (*Photo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{2}
-}
-
-func (m *Photo) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Photo.Unmarshal(m, b)
-}
-func (m *Photo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Photo.Marshal(b, m, deterministic)
-}
-func (m *Photo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Photo.Merge(m, src)
-}
-func (m *Photo) XXX_Size() int {
-	return xxx_messageInfo_Photo.Size(m)
-}
-func (m *Photo) XXX_DiscardUnknown() {
-	xxx_messageInfo_Photo.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Photo proto.InternalMessageInfo
-
-func (m *Photo) GetPhotoFormat() Photo_PhotoFormat {
-	if m != nil {
-		return m.PhotoFormat
-	}
-	return Photo_JPG
-}
-
-func (m *Photo) GetPhoto() []byte {
-	if m != nil {
-		return m.Photo
-	}
-	return nil
-}
-
-type CreateHomeworkRequest struct {
-	ClassUuid            int32     `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	Homework             *Homework `protobuf:"bytes,2,opt,name=homework,proto3" json:"homework,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *CreateHomeworkRequest) Reset()         { *m = CreateHomeworkRequest{} }
-func (m *CreateHomeworkRequest) String() string { return proto.CompactTextString(m) }
-func (*CreateHomeworkRequest) ProtoMessage()    {}
-func (*CreateHomeworkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{3}
-}
-
-func (m *CreateHomeworkRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateHomeworkRequest.Unmarshal(m, b)
-}
-func (m *CreateHomeworkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateHomeworkRequest.Marshal(b, m, deterministic)
-}
-func (m *CreateHomeworkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateHomeworkRequest.Merge(m, src)
-}
-func (m *CreateHomeworkRequest) XXX_Size() int {
-	return xxx_messageInfo_CreateHomeworkRequest.Size(m)
-}
-func (m *CreateHomeworkRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateHomeworkRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CreateHomeworkRequest proto.InternalMessageInfo
-
-func (m *CreateHomeworkRequest) GetClassUuid() int32 {
-	if m != nil {
-		return m.ClassUuid
-	}
-	return 0
-}
-
-func (m *CreateHomeworkRequest) GetHomework() *Homework {
+func (m *Homeworks) GetHomework() []*Homework {
 	if m != nil {
 		return m.Homework
 	}
 	return nil
-}
-
-type CreateHomeworkResponse struct {
-	Status               *Status  `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
-	HomeworkUuid         int32    `protobuf:"varint,2,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *CreateHomeworkResponse) Reset()         { *m = CreateHomeworkResponse{} }
-func (m *CreateHomeworkResponse) String() string { return proto.CompactTextString(m) }
-func (*CreateHomeworkResponse) ProtoMessage()    {}
-func (*CreateHomeworkResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{4}
-}
-
-func (m *CreateHomeworkResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateHomeworkResponse.Unmarshal(m, b)
-}
-func (m *CreateHomeworkResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateHomeworkResponse.Marshal(b, m, deterministic)
-}
-func (m *CreateHomeworkResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateHomeworkResponse.Merge(m, src)
-}
-func (m *CreateHomeworkResponse) XXX_Size() int {
-	return xxx_messageInfo_CreateHomeworkResponse.Size(m)
-}
-func (m *CreateHomeworkResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateHomeworkResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CreateHomeworkResponse proto.InternalMessageInfo
-
-func (m *CreateHomeworkResponse) GetStatus() *Status {
-	if m != nil {
-		return m.Status
-	}
-	return nil
-}
-
-func (m *CreateHomeworkResponse) GetHomeworkUuid() int32 {
-	if m != nil {
-		return m.HomeworkUuid
-	}
-	return 0
-}
-
-type UpdateHomeworkRequest struct {
-	ClassUuid            int32     `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	HomeworkUuid         int32     `protobuf:"varint,2,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
-	Homework             *Homework `protobuf:"bytes,3,opt,name=homework,proto3" json:"homework,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *UpdateHomeworkRequest) Reset()         { *m = UpdateHomeworkRequest{} }
-func (m *UpdateHomeworkRequest) String() string { return proto.CompactTextString(m) }
-func (*UpdateHomeworkRequest) ProtoMessage()    {}
-func (*UpdateHomeworkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{5}
-}
-
-func (m *UpdateHomeworkRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UpdateHomeworkRequest.Unmarshal(m, b)
-}
-func (m *UpdateHomeworkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UpdateHomeworkRequest.Marshal(b, m, deterministic)
-}
-func (m *UpdateHomeworkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateHomeworkRequest.Merge(m, src)
-}
-func (m *UpdateHomeworkRequest) XXX_Size() int {
-	return xxx_messageInfo_UpdateHomeworkRequest.Size(m)
-}
-func (m *UpdateHomeworkRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateHomeworkRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateHomeworkRequest proto.InternalMessageInfo
-
-func (m *UpdateHomeworkRequest) GetClassUuid() int32 {
-	if m != nil {
-		return m.ClassUuid
-	}
-	return 0
-}
-
-func (m *UpdateHomeworkRequest) GetHomeworkUuid() int32 {
-	if m != nil {
-		return m.HomeworkUuid
-	}
-	return 0
-}
-
-func (m *UpdateHomeworkRequest) GetHomework() *Homework {
-	if m != nil {
-		return m.Homework
-	}
-	return nil
-}
-
-type DeleteHomeworkRequest struct {
-	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	HomeworkUuid         int32    `protobuf:"varint,2,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteHomeworkRequest) Reset()         { *m = DeleteHomeworkRequest{} }
-func (m *DeleteHomeworkRequest) String() string { return proto.CompactTextString(m) }
-func (*DeleteHomeworkRequest) ProtoMessage()    {}
-func (*DeleteHomeworkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{6}
-}
-
-func (m *DeleteHomeworkRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteHomeworkRequest.Unmarshal(m, b)
-}
-func (m *DeleteHomeworkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteHomeworkRequest.Marshal(b, m, deterministic)
-}
-func (m *DeleteHomeworkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteHomeworkRequest.Merge(m, src)
-}
-func (m *DeleteHomeworkRequest) XXX_Size() int {
-	return xxx_messageInfo_DeleteHomeworkRequest.Size(m)
-}
-func (m *DeleteHomeworkRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteHomeworkRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteHomeworkRequest proto.InternalMessageInfo
-
-func (m *DeleteHomeworkRequest) GetClassUuid() int32 {
-	if m != nil {
-		return m.ClassUuid
-	}
-	return 0
-}
-
-func (m *DeleteHomeworkRequest) GetHomeworkUuid() int32 {
-	if m != nil {
-		return m.HomeworkUuid
-	}
-	return 0
-}
-
-type HomeworkSolution struct {
-	HomeworkUuid int32 `protobuf:"varint,1,opt,name=homeworkUuid,proto3" json:"homeworkUuid,omitempty"`
-	// Types that are valid to be assigned to HomeworkSolution:
-	//	*HomeworkSolution_Document
-	//	*HomeworkSolution_Photo
-	HomeworkSolution     isHomeworkSolution_HomeworkSolution `protobuf_oneof:"homeworkSolution"`
-	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
-	XXX_unrecognized     []byte                              `json:"-"`
-	XXX_sizecache        int32                               `json:"-"`
-}
-
-func (m *HomeworkSolution) Reset()         { *m = HomeworkSolution{} }
-func (m *HomeworkSolution) String() string { return proto.CompactTextString(m) }
-func (*HomeworkSolution) ProtoMessage()    {}
-func (*HomeworkSolution) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ffa1a0a834cde22, []int{7}
-}
-
-func (m *HomeworkSolution) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_HomeworkSolution.Unmarshal(m, b)
-}
-func (m *HomeworkSolution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_HomeworkSolution.Marshal(b, m, deterministic)
-}
-func (m *HomeworkSolution) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HomeworkSolution.Merge(m, src)
-}
-func (m *HomeworkSolution) XXX_Size() int {
-	return xxx_messageInfo_HomeworkSolution.Size(m)
-}
-func (m *HomeworkSolution) XXX_DiscardUnknown() {
-	xxx_messageInfo_HomeworkSolution.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_HomeworkSolution proto.InternalMessageInfo
-
-func (m *HomeworkSolution) GetHomeworkUuid() int32 {
-	if m != nil {
-		return m.HomeworkUuid
-	}
-	return 0
-}
-
-type isHomeworkSolution_HomeworkSolution interface {
-	isHomeworkSolution_HomeworkSolution()
-}
-
-type HomeworkSolution_Document struct {
-	Document *Document `protobuf:"bytes,2,opt,name=document,proto3,oneof"`
-}
-
-type HomeworkSolution_Photo struct {
-	Photo *Photo `protobuf:"bytes,3,opt,name=photo,proto3,oneof"`
-}
-
-func (*HomeworkSolution_Document) isHomeworkSolution_HomeworkSolution() {}
-
-func (*HomeworkSolution_Photo) isHomeworkSolution_HomeworkSolution() {}
-
-func (m *HomeworkSolution) GetHomeworkSolution() isHomeworkSolution_HomeworkSolution {
-	if m != nil {
-		return m.HomeworkSolution
-	}
-	return nil
-}
-
-func (m *HomeworkSolution) GetDocument() *Document {
-	if x, ok := m.GetHomeworkSolution().(*HomeworkSolution_Document); ok {
-		return x.Document
-	}
-	return nil
-}
-
-func (m *HomeworkSolution) GetPhoto() *Photo {
-	if x, ok := m.GetHomeworkSolution().(*HomeworkSolution_Photo); ok {
-		return x.Photo
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*HomeworkSolution) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*HomeworkSolution_Document)(nil),
-		(*HomeworkSolution_Photo)(nil),
-	}
 }
 
 func init() {
-	proto.RegisterEnum("Document_DocumentType", Document_DocumentType_name, Document_DocumentType_value)
-	proto.RegisterEnum("Photo_PhotoFormat", Photo_PhotoFormat_name, Photo_PhotoFormat_value)
 	proto.RegisterType((*Homework)(nil), "Homework")
-	proto.RegisterType((*Document)(nil), "Document")
-	proto.RegisterType((*Photo)(nil), "Photo")
-	proto.RegisterType((*CreateHomeworkRequest)(nil), "CreateHomeworkRequest")
-	proto.RegisterType((*CreateHomeworkResponse)(nil), "CreateHomeworkResponse")
-	proto.RegisterType((*UpdateHomeworkRequest)(nil), "UpdateHomeworkRequest")
-	proto.RegisterType((*DeleteHomeworkRequest)(nil), "DeleteHomeworkRequest")
-	proto.RegisterType((*HomeworkSolution)(nil), "HomeworkSolution")
+	proto.RegisterType((*Homeworks)(nil), "Homeworks")
 }
 
 func init() { proto.RegisterFile("protos/homework.proto", fileDescriptor_2ffa1a0a834cde22) }
 
 var fileDescriptor_2ffa1a0a834cde22 = []byte{
-	// 498 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x54, 0xcf, 0x8f, 0xd2, 0x40,
-	0x14, 0x66, 0x96, 0xc0, 0x76, 0x1f, 0x84, 0xd4, 0x61, 0x5b, 0x09, 0x31, 0x2e, 0x99, 0x44, 0xdd,
-	0xd3, 0x18, 0xab, 0x27, 0x6f, 0xee, 0x92, 0x5d, 0xd6, 0x83, 0x92, 0x22, 0x07, 0x8d, 0x1e, 0xb0,
-	0x7d, 0x11, 0x22, 0x74, 0x6a, 0x67, 0xaa, 0xf1, 0xe6, 0xc1, 0xb3, 0x17, 0xff, 0x4c, 0xff, 0x09,
-	0xd3, 0x5f, 0x43, 0x4b, 0x21, 0xd1, 0x83, 0x5e, 0xc8, 0xbc, 0xef, 0xbd, 0xf7, 0xbd, 0xef, 0xf1,
-	0x3d, 0x00, 0x2b, 0x8c, 0x84, 0x12, 0xf2, 0xe1, 0x52, 0x6c, 0xf0, 0x8b, 0x88, 0x3e, 0xf2, 0x34,
-	0x1e, 0xf6, 0x73, 0x58, 0xaa, 0x85, 0x8a, 0x65, 0x06, 0xb2, 0x1f, 0x04, 0x8c, 0x49, 0x5e, 0x47,
-	0x19, 0x74, 0x8b, 0x9e, 0x79, 0xbc, 0xf2, 0x07, 0x64, 0x44, 0xce, 0x5b, 0x6e, 0x05, 0xa3, 0x0f,
-	0xc0, 0xf0, 0x85, 0x17, 0x6f, 0x30, 0x50, 0x83, 0xa3, 0x11, 0x39, 0xef, 0x38, 0x27, 0x7c, 0x9c,
-	0x03, 0x93, 0x86, 0xab, 0x93, 0xf4, 0x2e, 0xb4, 0xc2, 0xa5, 0x50, 0x62, 0xd0, 0x4c, 0xab, 0xda,
-	0x7c, 0x9a, 0x44, 0x93, 0x86, 0x9b, 0xc1, 0x17, 0x16, 0xf4, 0x0b, 0xe2, 0x9b, 0x40, 0xaa, 0x28,
-	0xf6, 0xd4, 0x4a, 0x04, 0xec, 0x3b, 0x01, 0xa3, 0xe0, 0xa3, 0x4f, 0xa1, 0x5b, 0xf0, 0xbd, 0xfa,
-	0x1a, 0x62, 0x2a, 0xa8, 0xe7, 0xd8, 0x7a, 0xa0, 0x7e, 0x24, 0x59, 0xb7, 0x52, 0x4b, 0x87, 0x3b,
-	0x42, 0xbb, 0x5b, 0x6d, 0x6c, 0x04, 0xdd, 0x72, 0x27, 0x3d, 0x86, 0xe6, 0xf8, 0xe5, 0xa5, 0xd9,
-	0x48, 0x1e, 0xd3, 0xf1, 0x95, 0x49, 0x98, 0x82, 0x56, 0xaa, 0x97, 0x3e, 0x81, 0x4e, 0xaa, 0xf7,
-	0x4a, 0x44, 0x9b, 0x85, 0xca, 0x15, 0xd0, 0x6c, 0x99, 0xec, 0x33, 0xcb, 0xb8, 0xe5, 0x32, 0x7a,
-	0x9a, 0xb7, 0xe7, 0x93, 0xb3, 0x80, 0x9d, 0x41, 0xa7, 0xd4, 0x91, 0x0c, 0x7b, 0x3e, 0xbd, 0xce,
-	0xa7, 0xbe, 0xb8, 0x36, 0x09, 0x7b, 0x0b, 0xd6, 0x65, 0x84, 0x0b, 0x85, 0x85, 0x25, 0x2e, 0x7e,
-	0x8a, 0x51, 0x2a, 0x7a, 0x07, 0x4e, 0xbc, 0xf5, 0x42, 0xca, 0x92, 0x2d, 0x5b, 0x80, 0xde, 0x03,
-	0xa3, 0xf8, 0x2a, 0xb5, 0x27, 0x9a, 0x41, 0xa7, 0xd8, 0x3b, 0xb0, 0x77, 0xd9, 0x65, 0x28, 0x02,
-	0x89, 0xf4, 0x0c, 0xda, 0xd9, 0x55, 0xa4, 0xdc, 0x1d, 0xe7, 0x98, 0xcf, 0xd2, 0xd0, 0xcd, 0xe1,
-	0xda, 0x65, 0x1c, 0xd5, 0x2f, 0x83, 0x7d, 0x23, 0x60, 0xcd, 0x43, 0xff, 0xaf, 0xd5, 0xff, 0x01,
-	0x77, 0x65, 0xc3, 0xe6, 0xe1, 0x0d, 0x5f, 0x83, 0x35, 0xc6, 0x35, 0xfe, 0x03, 0x05, 0xec, 0x27,
-	0x01, 0xb3, 0x60, 0x9d, 0x89, 0x75, 0x9c, 0x1c, 0xeb, 0xff, 0xfd, 0xc1, 0x50, 0x30, 0x97, 0x3b,
-	0x02, 0x9c, 0x5f, 0x04, 0x06, 0xd3, 0x08, 0x25, 0x06, 0x0a, 0x23, 0x2d, 0x0f, 0xa3, 0xcf, 0x2b,
-	0x0f, 0xe9, 0x33, 0xe8, 0x55, 0xfd, 0xa6, 0x36, 0xdf, 0x7b, 0x5e, 0xc3, 0xdb, 0xfc, 0xc0, 0x61,
-	0x3c, 0x82, 0x5e, 0xd5, 0x52, 0x6a, 0xf3, 0xbd, 0x1e, 0x0f, 0x8b, 0x93, 0x49, 0x5a, 0xaa, 0x1e,
-	0x50, 0x9b, 0xef, 0x35, 0x65, 0xdb, 0x72, 0x1f, 0xcc, 0xa4, 0xe2, 0x43, 0x79, 0xce, 0xd6, 0x5f,
-	0x5d, 0xe7, 0xdc, 0x40, 0x7f, 0x2e, 0xeb, 0x7b, 0x3a, 0x70, 0x3a, 0xc3, 0xc0, 0xaf, 0xb9, 0x73,
-	0x8b, 0xef, 0x42, 0x9a, 0xea, 0x02, 0xde, 0x18, 0xe8, 0xc7, 0xde, 0x5a, 0xc4, 0xfe, 0xfb, 0x76,
-	0xfa, 0x57, 0xf8, 0xf8, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0x93, 0x93, 0xab, 0x60, 0x38, 0x05,
-	0x00, 0x00,
+	// 225 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0x4f, 0x4b, 0x85, 0x40,
+	0x14, 0xc5, 0x99, 0xa4, 0xd2, 0x9b, 0x44, 0x8c, 0x05, 0x83, 0x2b, 0xb1, 0x02, 0x69, 0x61, 0x30,
+	0x7d, 0x01, 0xa9, 0x45, 0x2d, 0x43, 0x71, 0xd3, 0xce, 0x9c, 0x1b, 0x49, 0xe6, 0xc4, 0xfc, 0xa9,
+	0xaf, 0x1f, 0xcf, 0xe7, 0x8c, 0x3c, 0xde, 0xdb, 0xcd, 0x9c, 0xdf, 0x39, 0x87, 0xc3, 0x85, 0xab,
+	0x1f, 0x25, 0x8d, 0xd4, 0xf7, 0x9f, 0xf2, 0x1b, 0xff, 0xa4, 0xfa, 0x2a, 0xe7, 0x7f, 0x9a, 0x2c,
+	0xb2, 0x36, 0x9d, 0xb1, 0x7a, 0x2b, 0xe6, 0x15, 0x84, 0x2f, 0x8b, 0x8d, 0xe6, 0x10, 0xbb, 0x48,
+	0x6b, 0x07, 0xc1, 0x48, 0x46, 0x8a, 0xe3, 0x7a, 0x47, 0xa3, 0x17, 0x10, 0x58, 0x35, 0xb2, 0xa3,
+	0x8c, 0x14, 0x51, 0xbd, 0x79, 0xe6, 0x1c, 0x22, 0xd7, 0xa0, 0xe9, 0x2d, 0x84, 0xce, 0xce, 0x48,
+	0x16, 0x14, 0x67, 0x3c, 0x2a, 0x1d, 0xad, 0x3d, 0xe2, 0x15, 0xb0, 0x57, 0x85, 0x1a, 0x27, 0x83,
+	0xca, 0xe1, 0x06, 0xd5, 0xef, 0xd0, 0x23, 0xbd, 0x81, 0xf3, 0x27, 0x85, 0x9d, 0x41, 0xbf, 0x6b,
+	0xad, 0x48, 0x4f, 0xcb, 0x66, 0x5e, 0xcf, 0x3f, 0x20, 0x69, 0xf5, 0x7e, 0xf8, 0x0e, 0x2e, 0x1b,
+	0x9c, 0x84, 0x97, 0xe5, 0x68, 0xcd, 0x20, 0xa7, 0x43, 0x15, 0xf4, 0x1a, 0xe2, 0x67, 0x34, 0xeb,
+	0x76, 0x07, 0x52, 0xf0, 0x66, 0xfd, 0x08, 0x6f, 0x21, 0x0a, 0xdb, 0x8f, 0xd2, 0x8a, 0xf7, 0x93,
+	0xf9, 0x64, 0x0f, 0xff, 0x01, 0x00, 0x00, 0xff, 0xff, 0xfd, 0xc1, 0xfc, 0x95, 0x60, 0x01, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -603,10 +148,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PresenterHomeworkServiceClient interface {
-	CreateHomework(ctx context.Context, in *CreateHomeworkRequest, opts ...grpc.CallOption) (*CreateHomeworkResponse, error)
-	UpdateHomework(ctx context.Context, in *UpdateHomeworkRequest, opts ...grpc.CallOption) (*Status, error)
-	DeleteHomework(ctx context.Context, in *DeleteHomeworkRequest, opts ...grpc.CallOption) (*Status, error)
-	DelegateHomework(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error)
+	CreateHomework(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error)
 }
 
 type presenterHomeworkServiceClient struct {
@@ -617,36 +159,9 @@ func NewPresenterHomeworkServiceClient(cc *grpc.ClientConn) PresenterHomeworkSer
 	return &presenterHomeworkServiceClient{cc}
 }
 
-func (c *presenterHomeworkServiceClient) CreateHomework(ctx context.Context, in *CreateHomeworkRequest, opts ...grpc.CallOption) (*CreateHomeworkResponse, error) {
-	out := new(CreateHomeworkResponse)
+func (c *presenterHomeworkServiceClient) CreateHomework(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
 	err := c.cc.Invoke(ctx, "/PresenterHomeworkService/CreateHomework", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *presenterHomeworkServiceClient) UpdateHomework(ctx context.Context, in *UpdateHomeworkRequest, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
-	err := c.cc.Invoke(ctx, "/PresenterHomeworkService/UpdateHomework", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *presenterHomeworkServiceClient) DeleteHomework(ctx context.Context, in *DeleteHomeworkRequest, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
-	err := c.cc.Invoke(ctx, "/PresenterHomeworkService/DeleteHomework", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *presenterHomeworkServiceClient) DelegateHomework(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
-	err := c.cc.Invoke(ctx, "/PresenterHomeworkService/DelegateHomework", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -655,27 +170,15 @@ func (c *presenterHomeworkServiceClient) DelegateHomework(ctx context.Context, i
 
 // PresenterHomeworkServiceServer is the server API for PresenterHomeworkService service.
 type PresenterHomeworkServiceServer interface {
-	CreateHomework(context.Context, *CreateHomeworkRequest) (*CreateHomeworkResponse, error)
-	UpdateHomework(context.Context, *UpdateHomeworkRequest) (*Status, error)
-	DeleteHomework(context.Context, *DeleteHomeworkRequest) (*Status, error)
-	DelegateHomework(context.Context, *Homework) (*Status, error)
+	CreateHomework(context.Context, *Homework) (*Status, error)
 }
 
 // UnimplementedPresenterHomeworkServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedPresenterHomeworkServiceServer struct {
 }
 
-func (*UnimplementedPresenterHomeworkServiceServer) CreateHomework(ctx context.Context, req *CreateHomeworkRequest) (*CreateHomeworkResponse, error) {
+func (*UnimplementedPresenterHomeworkServiceServer) CreateHomework(ctx context.Context, req *Homework) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateHomework not implemented")
-}
-func (*UnimplementedPresenterHomeworkServiceServer) UpdateHomework(ctx context.Context, req *UpdateHomeworkRequest) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateHomework not implemented")
-}
-func (*UnimplementedPresenterHomeworkServiceServer) DeleteHomework(ctx context.Context, req *DeleteHomeworkRequest) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteHomework not implemented")
-}
-func (*UnimplementedPresenterHomeworkServiceServer) DelegateHomework(ctx context.Context, req *Homework) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelegateHomework not implemented")
 }
 
 func RegisterPresenterHomeworkServiceServer(s *grpc.Server, srv PresenterHomeworkServiceServer) {
@@ -683,7 +186,7 @@ func RegisterPresenterHomeworkServiceServer(s *grpc.Server, srv PresenterHomewor
 }
 
 func _PresenterHomeworkService_CreateHomework_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateHomeworkRequest)
+	in := new(Homework)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -695,61 +198,7 @@ func _PresenterHomeworkService_CreateHomework_Handler(srv interface{}, ctx conte
 		FullMethod: "/PresenterHomeworkService/CreateHomework",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenterHomeworkServiceServer).CreateHomework(ctx, req.(*CreateHomeworkRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PresenterHomeworkService_UpdateHomework_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateHomeworkRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PresenterHomeworkServiceServer).UpdateHomework(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/PresenterHomeworkService/UpdateHomework",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenterHomeworkServiceServer).UpdateHomework(ctx, req.(*UpdateHomeworkRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PresenterHomeworkService_DeleteHomework_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteHomeworkRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PresenterHomeworkServiceServer).DeleteHomework(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/PresenterHomeworkService/DeleteHomework",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenterHomeworkServiceServer).DeleteHomework(ctx, req.(*DeleteHomeworkRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PresenterHomeworkService_DelegateHomework_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Homework)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PresenterHomeworkServiceServer).DelegateHomework(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/PresenterHomeworkService/DelegateHomework",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenterHomeworkServiceServer).DelegateHomework(ctx, req.(*Homework))
+		return srv.(PresenterHomeworkServiceServer).CreateHomework(ctx, req.(*Homework))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -762,18 +211,6 @@ var _PresenterHomeworkService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "CreateHomework",
 			Handler:    _PresenterHomeworkService_CreateHomework_Handler,
 		},
-		{
-			MethodName: "UpdateHomework",
-			Handler:    _PresenterHomeworkService_UpdateHomework_Handler,
-		},
-		{
-			MethodName: "DeleteHomework",
-			Handler:    _PresenterHomeworkService_DeleteHomework_Handler,
-		},
-		{
-			MethodName: "DelegateHomework",
-			Handler:    _PresenterHomeworkService_DelegateHomework_Handler,
-		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "protos/homework.proto",
@@ -783,7 +220,8 @@ var _PresenterHomeworkService_serviceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type UserHomeworkServiceClient interface {
-	SendHomeworkSolution(ctx context.Context, in *HomeworkSolution, opts ...grpc.CallOption) (*Status, error)
+	SendHomeworkSolution(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error)
+	GetHomeworks(ctx context.Context, in *Status, opts ...grpc.CallOption) (*Homeworks, error)
 }
 
 type userHomeworkServiceClient struct {
@@ -794,7 +232,7 @@ func NewUserHomeworkServiceClient(cc *grpc.ClientConn) UserHomeworkServiceClient
 	return &userHomeworkServiceClient{cc}
 }
 
-func (c *userHomeworkServiceClient) SendHomeworkSolution(ctx context.Context, in *HomeworkSolution, opts ...grpc.CallOption) (*Status, error) {
+func (c *userHomeworkServiceClient) SendHomeworkSolution(ctx context.Context, in *Homework, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
 	err := c.cc.Invoke(ctx, "/UserHomeworkService/SendHomeworkSolution", in, out, opts...)
 	if err != nil {
@@ -803,17 +241,30 @@ func (c *userHomeworkServiceClient) SendHomeworkSolution(ctx context.Context, in
 	return out, nil
 }
 
+func (c *userHomeworkServiceClient) GetHomeworks(ctx context.Context, in *Status, opts ...grpc.CallOption) (*Homeworks, error) {
+	out := new(Homeworks)
+	err := c.cc.Invoke(ctx, "/UserHomeworkService/GetHomeworks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserHomeworkServiceServer is the server API for UserHomeworkService service.
 type UserHomeworkServiceServer interface {
-	SendHomeworkSolution(context.Context, *HomeworkSolution) (*Status, error)
+	SendHomeworkSolution(context.Context, *Homework) (*Status, error)
+	GetHomeworks(context.Context, *Status) (*Homeworks, error)
 }
 
 // UnimplementedUserHomeworkServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedUserHomeworkServiceServer struct {
 }
 
-func (*UnimplementedUserHomeworkServiceServer) SendHomeworkSolution(ctx context.Context, req *HomeworkSolution) (*Status, error) {
+func (*UnimplementedUserHomeworkServiceServer) SendHomeworkSolution(ctx context.Context, req *Homework) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendHomeworkSolution not implemented")
+}
+func (*UnimplementedUserHomeworkServiceServer) GetHomeworks(ctx context.Context, req *Status) (*Homeworks, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHomeworks not implemented")
 }
 
 func RegisterUserHomeworkServiceServer(s *grpc.Server, srv UserHomeworkServiceServer) {
@@ -821,7 +272,7 @@ func RegisterUserHomeworkServiceServer(s *grpc.Server, srv UserHomeworkServiceSe
 }
 
 func _UserHomeworkService_SendHomeworkSolution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HomeworkSolution)
+	in := new(Homework)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -833,7 +284,25 @@ func _UserHomeworkService_SendHomeworkSolution_Handler(srv interface{}, ctx cont
 		FullMethod: "/UserHomeworkService/SendHomeworkSolution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserHomeworkServiceServer).SendHomeworkSolution(ctx, req.(*HomeworkSolution))
+		return srv.(UserHomeworkServiceServer).SendHomeworkSolution(ctx, req.(*Homework))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserHomeworkService_GetHomeworks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Status)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserHomeworkServiceServer).GetHomeworks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/UserHomeworkService/GetHomeworks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserHomeworkServiceServer).GetHomeworks(ctx, req.(*Status))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -845,6 +314,10 @@ var _UserHomeworkService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendHomeworkSolution",
 			Handler:    _UserHomeworkService_SendHomeworkSolution_Handler,
+		},
+		{
+			MethodName: "GetHomeworks",
+			Handler:    _UserHomeworkService_GetHomeworks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
