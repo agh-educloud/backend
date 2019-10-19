@@ -15,8 +15,8 @@ type userHomeworkServiceServer struct{}
 
 func (s *userHomeworkServiceServer) GetHomeworks(context.Context, *Status) (*Homeworks, error) {
 	homeworks = nil
-	homeworks = append(homeworks, &Homework{HomeworkUuid: 123, Url: "https://i.imgur.com/KUJmgtE.jpg"})
-	homeworks = append(homeworks, &Homework{HomeworkUuid: 321, Url: "https://i.imgur.com/yyQn13a.jpg"})
+	homeworks = append(homeworks, &Homework{HomeworkUuid: 123, Url: "https://i.imgur.com/KUJmgtE.jpg", MailTo: "teach@agh.edu.pl"})
+	homeworks = append(homeworks, &Homework{HomeworkUuid: 321, Url: "https://i.imgur.com/yyQn13a.jpg", MailTo: "teach@agh.edu.pl"})
 	return &Homeworks{Homework: homeworks}, nil
 }
 
