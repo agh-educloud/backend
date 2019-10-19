@@ -2,6 +2,7 @@ package main
 
 import (
 	"../chat"
+	"../feedback"
 	"../homework"
 )
 
@@ -19,7 +20,8 @@ type User struct {
 
 func main() {
 	go homework.StartServer()
-	chat.StartServer()
+	go chat.StartServer()
+	feedback.StartServer()
 
 	//uri := BuildUri()
 	//client, _ := mongo.NewClient(options.Client().ApplyURI(uri))
