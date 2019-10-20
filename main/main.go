@@ -1,7 +1,7 @@
 package main
 
 import (
-	"../chat"
+	"../quiz"
 )
 
 type User struct {
@@ -17,7 +17,7 @@ type User struct {
 //}
 
 func main() {
-	chat.StartServer()
+	quiz.StartServer()
 
 	//uri := BuildUri()
 	//client, _ := mongo.NewClient(options.Client().ApplyURI(uri))
