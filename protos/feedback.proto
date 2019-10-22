@@ -1,18 +1,16 @@
 syntax = "proto3";
 
+import "protos/status.proto";
+
 option go_package = "educloud";
 
+service FeedbackService {
+    rpc SendFeedback (Feedback) returns (Status);
+}
+
 message Feedback {
-    enum Rate {
-        TERRIBLE = 0;
-        BAD = 1;
-        OK = 2;
-        GOOD = 3;
-        EXCELLENT = 4;
-    }
-    Rate rate = 1;
-    string whatUserLike = 2;
-    string whatUserDislike = 3;
-    string additionalComment = 4;
+    double note = 1;
+    string name = 2;
+    string comment = 3;
 }
 
