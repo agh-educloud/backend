@@ -25,6 +25,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Class struct {
+	Uuid                 string          `json:"-"`
 	Name                 string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Topic                string          `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
 	QuizQuestion         []*QuizQuestion `protobuf:"bytes,3,rep,name=quizQuestion,proto3" json:"quizQuestion,omitempty"`
@@ -59,6 +60,13 @@ func (m *Class) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_Class proto.InternalMessageInfo
+
+func (m *Class) GetUuid() string {
+	if m != nil {
+		return m.Uuid
+	}
+	return ""
+}
 
 func (m *Class) GetName() string {
 	if m != nil {
