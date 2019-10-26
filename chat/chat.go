@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 var streams = make(map[string]ChatService_ReceiveMessagesServer)
@@ -31,14 +32,12 @@ func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessag
 
 func (s *chatServiceServer) ReceiveMessages(user *User, stream ChatService_ReceiveMessagesServer) error {
 	mutex.Lock()
-	println(streams[user.Uuid])
 	streams[user.Uuid] = stream
-	println(streams[user.Uuid])
 	mutex.Unlock()
 
-	for {
-		continue
-	}
+	time.Sleep(24 * time.Hour)
+
+	return nil
 }
 
 func StartServer() {
@@ -52,5 +51,11 @@ func StartServer() {
 
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")
+	}
+}
+
+func foo() {
+	for {
+		continue
 	}
 }
