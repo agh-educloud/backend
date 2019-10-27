@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-var classes []Class
+var classes []*ClassWithUuid
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
@@ -21,7 +21,7 @@ func main() {
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
-	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
+	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
 
 func enableCors(w *http.ResponseWriter) {
@@ -31,9 +31,10 @@ func enableCors(w *http.ResponseWriter) {
 func deleteClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 	var classUuid = mux.Vars(request)["id"]
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
 
 	for i, v := range classes {
-		if v.Uuid == classUuid {
+		if v.ClassUuid == int32(classUuidInt) {
 			classes = append(classes[:i], classes[i+1:]...)
 			writer.WriteHeader(http.StatusOK)
 			return
@@ -46,18 +47,19 @@ func deleteClass(writer http.ResponseWriter, request *http.Request) {
 func getAllClasses(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 
-	writer.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(writer).Encode(interface{}(json.Marshal(classes)))
+	var response = GetClassesResponse{Classes: classes}
+	_ = json.NewEncoder(writer).Encode(response)
 
 }
 func getClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 	var classUuid = mux.Vars(request)["id"]
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
 
 	for _, v := range classes {
-		if v.Uuid == classUuid {
+		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(writer).Encode(interface{}(json.Marshal(v)))
+			_ = json.NewEncoder(writer).Encode(v)
 			return
 		}
 	}
@@ -67,53 +69,76 @@ func getClass(writer http.ResponseWriter, request *http.Request) {
 
 func createClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
-	var class = ClassCreationRequest{}
-	reqBody, err := ioutil.ReadAll(request.Body)
 
+	reqBody, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		_, _ = fmt.Fprintf(writer, "Kindly enter data with the event title and description only in order to update")
 	}
-	_ = json.Unmarshal(reqBody, &class)
+
+	var class Class
+
+	err = class.XXX_Unmarshal(reqBody)
+
+	err = json.Unmarshal(reqBody, &class)
+	if err != nil {
+		fmt.Println("Error while unmarshal")
+	}
+	log.Println(class.Name)
 
 	var nextUuid = int32(len(classes) + 1)
-	var classUuid = strconv.FormatInt(int64(nextUuid), 10)
-	classes = append(classes, Class{Uuid: classUuid})
 
+	classes = append(classes, &ClassWithUuid{
+		ClassUuid: nextUuid,
+		Class:     &class,
+	})
 	log.Println("Created class")
+
+	var response = ClassCreationResponse{
+		ClassUuid:  nextUuid,
+		SecretCode: 12345,
+		Error:      nil,
+	}
+	//marshalled, _ := response.XXX_Marshal(reqBody,false)
 	writer.WriteHeader(http.StatusCreated)
-	var response = ClassCreationResponse{ClassUuid: nextUuid}
 	_ = json.NewEncoder(writer).Encode(response)
 }
 
 func updateClass(writer http.ResponseWriter, request *http.Request) {
-	var class = ClassUpdateRequest{}
+	enableCors(&writer)
+
 	var classUuid = mux.Vars(request)["id"]
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
 
 	reqBody, err := ioutil.ReadAll(request.Body)
-	if err != nil {
-		_, _ = fmt.Fprintf(writer, "Kindly enter data with the event title and description only in order to update")
-	}
-	_ = json.Unmarshal(reqBody, &class)
 
-	// TODO now updating only class name
+	var class ClassUpdateRequest
+
+	err = class.XXX_Unmarshal(reqBody)
+	err = json.Unmarshal(reqBody, &class)
+	if err != nil {
+		fmt.Println("Error while unmarshal")
+	}
+
+	//TODO more fields?
 	for _, v := range classes {
-		if v.Uuid == classUuid {
+		if v.ClassUuid == int32(classUuidInt) {
 			if len(class.Class.Name) > 0 {
-				v.Name = class.Class.Name
+				v.Class.Name = class.Class.Name
 				log.Println("Updated class name")
 			} else if len(class.Class.Topic) > 0 {
-				v.Topic = class.Class.Topic
+				v.Class.Topic = class.Class.Topic
 				log.Println("Updated class topic")
 			} else if len(class.Class.QuizQuestion) > 0 {
-				v.QuizQuestion = class.Class.QuizQuestion
+				v.Class.QuizQuestion = class.Class.QuizQuestion
 				log.Println("Updated class quiz questions")
 			}
 		}
 	}
 
 	log.Println("Updated class")
-	writer.WriteHeader(http.StatusAccepted)
+
 	var response = Status{Code: Status_OK}
 
+	writer.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(writer).Encode(response)
 }

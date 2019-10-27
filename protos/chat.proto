@@ -1,13 +1,9 @@
 syntax = "proto3";
 
-option go_package = "educloud";
-
-import "protos/user.proto";
-import "protos/status.proto";
+import "user.proto";
 
 service ChatService {
-    rpc ReceiveMessages (User) returns (stream ChatMessage);
-    rpc SendMessage (ChatMessage) returns (Status);
+    rpc ExchangeMessages (stream ChatMessage) returns (stream ChatMessage);
 }
 
 message ChatMessage {

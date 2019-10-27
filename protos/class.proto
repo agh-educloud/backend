@@ -1,22 +1,22 @@
 syntax = "proto3";
 
-option go_package = "educloud";
-
-import "protos/status.proto";
-import "protos/quiz.proto";
-import "protos/homework.proto";
-import "protos/chat.proto";
-import "protos/user.proto";
-import "protos/feedback.proto";
+import "status.proto";
+import "quiz.proto";
+import "homework.proto";
+import "chat.proto";
+import "user.proto";
+import "feedback.proto";
 
 
 service PresenterClassService {
     rpc CreateClass (ClassCreationRequest) returns (ClassCreationResponse);
     rpc UpdateClass (ClassUpdateRequest) returns (Status);
-    rpc DeleteClass (ClassDeleteRequest) returns (Status);
+    rpc DeleteClass (ClassUuid) returns (Status);
+    rpc GetClass (ClassUuid) returns (Class);
+    rpc GetClasses (Empty) returns (GetClassesResponse);
 
-    rpc StartClass (ClassStartRequest) returns (stream ChatMessage);
-    rpc EndClass (ClassEndRequest) returns (Status);
+    rpc StartClass (ClassUuid) returns (stream ChatMessage);
+    rpc EndClass (ClassUuid) returns (Status);
 }
 
 service UserClassService {
@@ -49,17 +49,20 @@ message ClassUpdateRequest {
     Class class = 2;
 }
 
-message ClassDeleteRequest {
+message ClassUuid {
     int32 classUuid = 1;
 }
 
-message ClassStartRequest {
-    int32 classUuid = 1;
+message GetClassesResponse{
+    repeated ClassWithUuid classes = 1;
 }
 
-message ClassEndRequest {
+message ClassWithUuid {
     int32 classUuid = 1;
+    Class class = 2;
 }
+
+message Empty{}
 
 message JoinClassRequest {
     int32 secretCode = 1;
