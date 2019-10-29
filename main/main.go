@@ -21,7 +21,7 @@ func main() {
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
-	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
+	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
 
 func enableCors(w *http.ResponseWriter) {
@@ -30,12 +30,16 @@ func enableCors(w *http.ResponseWriter) {
 
 func deleteClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
+
+	log.Println("Deleted class method")
+
 	var classUuid = mux.Vars(request)["id"]
 	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
 
 	for i, v := range classes {
 		if v.ClassUuid == int32(classUuidInt) {
 			classes = append(classes[:i], classes[i+1:]...)
+			log.Println("Deleted class")
 			writer.WriteHeader(http.StatusOK)
 			return
 		}
