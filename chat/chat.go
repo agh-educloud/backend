@@ -7,43 +7,35 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
-var streams = make(map[*User]ChatService_ReceiveMessagesServer)
+var streams = make(map[string]ChatService_ReceiveMessagesServer)
 var finished = false
 var mutex = &sync.Mutex{}
 
 type chatServiceServer struct{}
 
 func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessage) (*Status, error) {
-	println("Got request")
-	for user, stream := range streams {
-		println(user.Uuid)
-		//if user.Uuid != message.Sender.Uuid {
+	println("Got request", len(streams))
+	for _, stream := range streams {
 		if stream != nil {
 			if err := stream.Send(message); err != nil {
 				return &Status{Code: Status_DENIED, Message: "Error", Details: "Error"}, err
 			}
 		}
-		println("SENT", user.Name, stream)
-		//} else {
-		//	println("Same uuid")
-		//}
+		println("SENT", message.Message.Content)
 	}
-
-	return &Status{Code: Status_OK, Message: "Sent", Details: "XD"}, nil
+	println("EXIT")
+	return &Status{}, nil
 }
 
 func (s *chatServiceServer) ReceiveMessages(user *User, stream ChatService_ReceiveMessagesServer) error {
 	mutex.Lock()
-	streams[user] = stream
+	streams[user.Uuid] = stream
 	mutex.Unlock()
 
-	for {
-		if finished {
-			break
-		}
-	}
+	time.Sleep(24 * time.Hour)
 
 	return nil
 }
@@ -59,5 +51,11 @@ func StartServer() {
 
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")
+	}
+}
+
+func foo() {
+	for {
+		continue
 	}
 }
