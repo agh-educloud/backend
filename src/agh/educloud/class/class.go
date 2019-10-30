@@ -1,7 +1,7 @@
 package class
 
 import (
-	. "agh/educloud/generated/protos"
+	. "../generated/protos"
 	"context"
 	"google.golang.org/grpc"
 	"log"
