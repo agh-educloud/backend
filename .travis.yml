@@ -1,6 +1,6 @@
 language: go
 
-go_import_path: agh/educloud
+go_import_path: src/agh/educloud
 
 services:
   - docker
