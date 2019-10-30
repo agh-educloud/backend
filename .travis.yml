@@ -1,7 +1,8 @@
 language: go
 
-go_import_path: src/agh/educloud
-
+env:
+  - GOPATH=$GOPATH/src/src
+  
 services:
   - docker
 
