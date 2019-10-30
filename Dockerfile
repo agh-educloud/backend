@@ -5,18 +5,18 @@ LABEL version="1.0"
 WORKDIR src/app
 
 #Copy files
-COPY vendor vendor
-COPY main.go main.go
+COPY src src
 COPY .env .
 COPY protos protos/
-COPY utils utils/
+COPY scripts utils/
 
 #Enviroment
 USER root
+ENV GOPATH=/src/app/src
 RUN chmod -R +x utils
-RUN utils/set_up_enviroment.sh
+RUN scripts/set_up_enviroment.sh
 
 #Build
-RUN utils/generate_go_code.sh
+RUN scripts/generate_go_code.sh
 RUN go get -d ./...
 RUN go build main.go

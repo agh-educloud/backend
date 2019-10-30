@@ -1,7 +1,7 @@
 package feedback
 
 import (
-	. "../generated/protos"
+	. "agh/educloud/generated/protos"
 	"context"
 	"google.golang.org/grpc"
 	"log"

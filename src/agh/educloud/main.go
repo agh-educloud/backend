@@ -1,10 +1,10 @@
-package main
+package educloud
 
 import (
-	"../chat"
-	"../class"
-	"../feedback"
-	"../homework"
+	"agh/educloud/chat"
+	"agh/educloud/class"
+	"agh/educloud/feedback"
+	"agh/educloud/homework"
 	"sync"
 )
 
