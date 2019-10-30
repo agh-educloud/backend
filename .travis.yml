@@ -7,7 +7,7 @@ services:
   - docker
 
 before_install: 
-  - unset GOPATH && go mod tidy
+  - unset GOPATH && go mod init
   - go clean -modcache
   - go mod init github.com/agh-educloud/backend
 
