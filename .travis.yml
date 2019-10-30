@@ -1,12 +1,14 @@
 language: go
 
 go:
-  - "1.11.4"
+  - "1.13.3"
 
 services:
   - docker
 
-before_install:
+before_install: 
+  - unset GOPATH && go mod tidy
+  - go clean -modcache
   - go mod init github.com/agh-educloud/backend
 
 script:
