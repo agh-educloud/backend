@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"github.com/agh-eduweb/webAuth"
-	"log"
-	"net/http"
+	"github.com/agh-eduweb/chat"
+	"github.com/agh-eduweb/class"
+	"github.com/agh-eduweb/feedback"
+	"github.com/agh-eduweb/homework"
+	"sync"
 )
 
 type User struct {
@@ -12,19 +13,28 @@ type User struct {
 	OAuthService string
 }
 
+//func init() {
+//	err := gotenv.Load("./../.env")
+//	if err != nil {
+//		panic("Error loading .env!")
+//	}
+//}
+
 func main() {
+	var wg sync.WaitGroup
 
-	// We create a simple server using http.Server and run.
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":8000"),
-		Handler: webAuth.New(),
-	}
+	wg.Add(1)
+	go homework.StartServer()
 
-	log.Printf("Starting HTTP Server. Listening at %q", server.Addr)
-	if err := server.ListenAndServe(); err != http.ErrServerClosed {
-		log.Printf("%v", err)
-	} else {
-		log.Println("Server closed!")
-	}
+	wg.Add(2)
+	go chat.StartServer()
+
+	wg.Add(3)
+	go class.StartServer()
+
+	wg.Add(4)
+	go feedback.StartServer()
+
+	wg.Wait()
 
 }

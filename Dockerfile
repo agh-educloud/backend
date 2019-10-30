@@ -9,7 +9,7 @@ COPY vendor vendor
 COPY main.go main.go
 COPY .env .
 COPY protos protos/
-COPY utils utils/
+COPY scripts utils/
 
 #Enviroment
 USER root
