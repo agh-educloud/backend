@@ -1,8 +1,8 @@
 package class
 
 import (
-	. "../generated/protos"
 	"context"
+	"generated/protos"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -12,19 +12,19 @@ var classes = make([]string, 0, 10)
 
 type classUserService struct{}
 
-func (s *classUserService) JoinClass(ctx context.Context, request *JoinClassRequest) (*Status, error) {
+func (s *classUserService) JoinClass(ctx context.Context, request *educloud.JoinClassRequest) (*educloud.Status, error) {
 	classes = append(classes, "11111")
 
-	return &Status{Code: stringInSlice(request.SecretCode, classes)}, nil
+	return &educloud.Status{Code: stringInSlice(request.SecretCode, classes)}, nil
 }
 
-func stringInSlice(a string, list []string) Status_Code {
+func stringInSlice(a string, list []string) educloud.Status_Code {
 	for _, b := range list {
 		if b == a {
-			return Status_OK
+			return educloud.Status_OK
 		}
 	}
-	return Status_DENIED
+	return educloud.Status_DENIED
 }
 
 func StartServer() {
@@ -34,7 +34,7 @@ func StartServer() {
 	}
 
 	chatServer := grpc.NewServer()
-	RegisterUserClassServiceServer(chatServer, &classUserService{})
+	educloud.RegisterUserClassServiceServer(chatServer, &classUserService{})
 
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")

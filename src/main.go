@@ -1,10 +1,10 @@
-package educloud
+package src
 
 import (
-	"./chat"
-	"./class"
-	"./feedback"
-	"./homework"
+	class2 "class"
+	feedback2 "feedback"
+	"github.com/agh-educloud/backend/src/chat"
+	homework2 "homework"
 	"sync"
 )
 
@@ -24,16 +24,16 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	go homework.StartServer()
+	go homework2.StartServer()
 
 	wg.Add(2)
 	go chat.StartServer()
 
 	wg.Add(3)
-	go class.StartServer()
+	go class2.StartServer()
 
 	wg.Add(4)
-	go feedback.StartServer()
+	go feedback2.StartServer()
 
 	wg.Wait()
 
