@@ -5,6 +5,7 @@ import (
 	"backend/class"
 	"backend/feedback"
 	"backend/homework"
+	"backend/quiz"
 	"sync"
 )
 
@@ -26,6 +27,11 @@ func main() {
 
 	wg.Add(5)
 	go class.Start()
+
+	wg.Add(6)
+	go quiz.StartServer()
+
+	go quiz.Simulate()
 
 	wg.Wait()
 }

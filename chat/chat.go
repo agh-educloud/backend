@@ -18,8 +18,8 @@ type chatServiceServer struct{}
 func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessage) (*Status, error) {
 	for _, stream := range streams {
 		_ = stream.Send(message)
-		println("MULTICASTED", message.Message.Content)
 	}
+	println("MULTICASTED", message.Message.Content)
 	return &Status{}, nil
 }
 
