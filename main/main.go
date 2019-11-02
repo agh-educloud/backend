@@ -10,11 +10,32 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"../chat"
+	"../class"
+	"../feedback"
+	"../homework"
+	"sync"
 )
 
 var classes []*ClassWithUuid
 
 func main() {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go homework.StartServer()
+
+	wg.Add(2)
+	go chat.StartServer()
+
+	wg.Add(3)
+	go class.StartServer()
+
+	wg.Add(4)
+	go feedback.StartServer()
+
+	wg.Wait()
+
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/class", createClass).Methods("POST")
 	router.HandleFunc("/class/{id}", getClass).Methods("GET")
@@ -88,6 +109,21 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println("Error while unmarshal")
 	}
 	log.Println(class.Name)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go homework.StartServer()
+
+	wg.Add(2)
+	go chat.StartServer()
+
+	wg.Add(3)
+	go class.StartServer()
+
+	wg.Add(4)
+	go feedback.StartServer()
+
+	wg.Wait()
 
 	var nextUuid = int32(len(classes) + 1)
 

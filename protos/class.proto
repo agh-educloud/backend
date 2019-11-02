@@ -21,9 +21,9 @@ service PresenterClassService {
 
 service UserClassService {
     rpc JoinClass (JoinClassRequest) returns (Status);
-    rpc JoinAssigmentLoop(JoinAssigmentLoopRequest) returns (stream Assigment);
-    rpc SendMessageToPresenter (ChatMessage) returns (Status);
-    rpc SendFeedback (Feedback) returns (Status);
+//    rpc JoinAssigmentLoop(JoinAssigmentLoopRequest) returns (stream Assigment);
+//    rpc SendMessageToPresenter (ChatMessage) returns (Status);
+//    rpc SendFeedback (Feedback) returns (Status);
 }
 
 message Class {
@@ -65,7 +65,7 @@ message ClassWithUuid {
 message Empty{}
 
 message JoinClassRequest {
-    int32 secretCode = 1;
+    string secretCode = 1;
     User user = 2;
 }
 
