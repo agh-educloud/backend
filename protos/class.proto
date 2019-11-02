@@ -1,11 +1,13 @@
 syntax = "proto3";
 
-import "status.proto";
-import "quiz.proto";
-import "homework.proto";
-import "chat.proto";
-import "user.proto";
-import "feedback.proto";
+option go_package = "educloud";
+
+import "protos/status.proto";
+import "protos/quiz.proto";
+import "protos/homework.proto";
+import "protos/chat.proto";
+import "protos/user.proto";
+import "protos/feedback.proto";
 
 
 service PresenterClassService {

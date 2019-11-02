@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-import "status.proto";
+option go_package = "educloud";
+
+import "protos/status.proto";
 
 service PresenterQuizService{
     rpc DelegateQuizQuestion (QuizQuestion) returns (Status);
