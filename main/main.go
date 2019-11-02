@@ -1,10 +1,10 @@
 package main
 
 import (
-	"../chat"
-	"../class"
-	"../feedback"
-	"../homework"
+	"backend/chat"
+	"backend/class"
+	"backend/feedback"
+	"backend/homework"
 	"sync"
 )
 

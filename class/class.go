@@ -1,7 +1,7 @@
 package class
 
 import (
-	. "../generated/protos"
+	. "backend/generated/protos"
 	"context"
 	"encoding/json"
 	"fmt"

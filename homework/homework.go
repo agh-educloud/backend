@@ -1,7 +1,7 @@
 package homework
 
 import (
-	. "../generated/protos"
+	. "backend/generated/protos"
 	"context"
 	"google.golang.org/grpc"
 	"log"

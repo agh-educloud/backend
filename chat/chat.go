@@ -1,7 +1,7 @@
 package chat
 
 import (
-	. "../generated/protos"
+	. "backend/generated/protos"
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -11,22 +11,15 @@ import (
 )
 
 var streams = make(map[string]ChatService_ReceiveMessagesServer)
-var finished = false
 var mutex = &sync.Mutex{}
 
 type chatServiceServer struct{}
 
 func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessage) (*Status, error) {
-	println("Got request", len(streams))
 	for _, stream := range streams {
-		if stream != nil {
-			if err := stream.Send(message); err != nil {
-				return &Status{Code: Status_DENIED, Message: "Error", Details: "Error"}, err
-			}
-		}
-		println("SENT", message.Message.Content)
+		_ = stream.Send(message)
+		println("MULTICASTED", message.Message.Content)
 	}
-	println("EXIT")
 	return &Status{}, nil
 }
 
@@ -51,11 +44,5 @@ func StartServer() {
 
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")
-	}
-}
-
-func foo() {
-	for {
-		continue
 	}
 }
