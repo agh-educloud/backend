@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net"
 	"net/http"
 	"strconv"
@@ -17,23 +18,16 @@ import (
 
 var webCreatedClasses []*ClassWithUuid
 
-var classes = make([]string, 0, 10)
+var codesToClassUuid = make(map[string]string)
 
 type classUserService struct{}
 
 func (s *classUserService) JoinClass(ctx context.Context, request *JoinClassRequest) (*Status, error) {
-	classes = append(classes, "11111")
-
-	return &Status{Code: stringInSlice(request.SecretCode, classes)}, nil
-}
-
-func stringInSlice(a string, list []string) Status_Code {
-	for _, b := range list {
-		if b == a {
-			return Status_OK
-		}
+	if _, ok := codesToClassUuid[request.SecretCode]; ok {
+		return &Status{Code: Status_OK}, nil
+	} else {
+		return &Status{Code: Status_DENIED}, nil
 	}
-	return Status_DENIED
 }
 
 func StartServer() {
@@ -56,6 +50,7 @@ func Start() {
 	router.HandleFunc("/class/{id}", getClass).Methods("GET")
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
+	router.HandleFunc("/class/{id}", startClass).Methods("POST")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
 	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
@@ -125,7 +120,7 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 	}
 	log.Println(class.Name)
 
-	var nextUuid = int32(len(classes) + 1)
+	var nextUuid = int32(len(webCreatedClasses) + 1)
 
 	webCreatedClasses = append(webCreatedClasses, &ClassWithUuid{
 		ClassUuid: nextUuid,
@@ -138,7 +133,7 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		SecretCode: 12345,
 		Error:      nil,
 	}
-	//marshalled, _ := response.XXX_Marshal(reqBody,false)
+
 	writer.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(writer).Encode(response)
 }
@@ -181,4 +176,34 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 
 	writer.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(writer).Encode(response)
+}
+
+func startClass(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+
+	log.Println("Starting class method")
+
+	var classUuid = mux.Vars(request)["id"]
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
+
+	for _, v := range webCreatedClasses {
+		if v.ClassUuid == int32(classUuidInt) {
+			writer.WriteHeader(http.StatusOK)
+			codesToClassUuid[classUuid] = generateCode()
+			log.Println("Created secret code for class " + classUuid + " : " + codesToClassUuid[classUuid])
+			return
+		}
+	}
+
+	writer.WriteHeader(http.StatusBadRequest)
+}
+
+var letterRunes = []rune("0123456789")
+
+func generateCode() string {
+	str := make([]rune, 5)
+	for i := range str {
+		str[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(str)
 }
