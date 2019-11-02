@@ -13,10 +13,12 @@ import "protos/feedback.proto";
 service PresenterClassService {
     rpc CreateClass (ClassCreationRequest) returns (ClassCreationResponse);
     rpc UpdateClass (ClassUpdateRequest) returns (Status);
-    rpc DeleteClass (ClassDeleteRequest) returns (Status);
+    rpc DeleteClass (ClassUuid) returns (Status);
+    rpc GetClass (ClassUuid) returns (Class);
+    rpc GetClasses (Empty) returns (GetClassesResponse);
 
-    rpc StartClass (ClassStartRequest) returns (stream ChatMessage);
-    rpc EndClass (ClassEndRequest) returns (Status);
+    rpc StartClass (ClassUuid) returns (stream ChatMessage);
+    rpc EndClass (ClassUuid) returns (Status);
 }
 
 service UserClassService {
@@ -49,17 +51,20 @@ message ClassUpdateRequest {
     Class class = 2;
 }
 
-message ClassDeleteRequest {
+message ClassUuid {
     int32 classUuid = 1;
 }
 
-message ClassStartRequest {
-    int32 classUuid = 1;
+message GetClassesResponse{
+    repeated ClassWithUuid classes = 1;
 }
 
-message ClassEndRequest {
+message ClassWithUuid {
     int32 classUuid = 1;
+    Class class = 2;
 }
+
+message Empty{}
 
 message JoinClassRequest {
     string secretCode = 1;
