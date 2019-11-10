@@ -25,10 +25,10 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type QuizQuestion struct {
-	Uuid                 int32     `protobuf:"varint,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
-	Question             string    `protobuf:"bytes,2,opt,name=question,proto3" json:"question,omitempty"`
-	Hint                 string    `protobuf:"bytes,3,opt,name=hint,proto3" json:"hint,omitempty"`
-	Option               []*Option `protobuf:"bytes,4,rep,name=option,proto3" json:"option,omitempty"`
+	Uuid                 int32     `protobuf:"varint,1,opt,name=uuid,proto3" json:"1,omitempty"`
+	Question             string    `protobuf:"bytes,2,opt,name=question,proto3" json:"2,omitempty"`
+	Hint                 string    `protobuf:"bytes,3,opt,name=hint,proto3" json:"3,omitempty"`
+	Option               []*Option `protobuf:"bytes,4,rep,name=option,proto3" json:"4,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -88,7 +88,7 @@ func (m *QuizQuestion) GetOption() []*Option {
 }
 
 type Option struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`

@@ -1,10 +1,7 @@
 package main
 
 import (
-	"../chat"
 	"../class"
-	"../feedback"
-	"../homework"
 	"sync"
 )
 
@@ -25,7 +22,7 @@ func main() {
 	go feedback.StartServer()
 
 	wg.Add(5)
-	go class.Start()
+	class.Start()
 
-	wg.Wait()
+	//wg.Wait()
 }

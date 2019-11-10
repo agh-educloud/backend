@@ -25,11 +25,11 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Class struct {
-	Name                 string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Topic                string          `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
-	QuizQuestion         []*QuizQuestion `protobuf:"bytes,3,rep,name=quizQuestion,proto3" json:"quizQuestion,omitempty"`
-	Homework             []*Homework     `protobuf:"bytes,4,rep,name=homework,proto3" json:"homework,omitempty"`
-	Presentation         []byte          `protobuf:"bytes,5,opt,name=presentation,proto3" json:"presentation,omitempty"`
+	Name                 string          `protobuf:"bytes,1,opt,name=name,proto3" json:"1,omitempty"`
+	Topic                string          `protobuf:"bytes,2,opt,name=topic,proto3" json:"2,omitempty"`
+	QuizQuestion         []*QuizQuestion `protobuf:"bytes,3,rep,name=quizQuestion,proto3" json:"3,omitempty"`
+	Homework             []*Homework     `protobuf:"bytes,4,rep,name=homework,proto3" json:"4,omitempty"`
+	Presentation         []byte          `protobuf:"bytes,5,opt,name=presentation,proto3" json:"5,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
@@ -135,9 +135,9 @@ func (m *ClassCreationRequest) GetClass() *Class {
 }
 
 type ClassCreationResponse struct {
-	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	SecretCode           int32    `protobuf:"varint,2,opt,name=secretCode,proto3" json:"secretCode,omitempty"`
-	Error                *Status  `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"1,omitempty"`
+	SecretCode           int32    `protobuf:"varint,2,opt,name=secretCode,proto3" json:"2,omitempty"`
+	Error                *Status  `protobuf:"bytes,3,opt,name=error,proto3" json:"3,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -190,8 +190,8 @@ func (m *ClassCreationResponse) GetError() *Status {
 }
 
 type ClassUpdateRequest struct {
-	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	Class                *Class   `protobuf:"bytes,2,opt,name=class,proto3" json:"class,omitempty"`
+	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"1,omitempty"`
+	Class                *Class   `protobuf:"bytes,2,opt,name=class,proto3" json:"2,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -237,7 +237,7 @@ func (m *ClassUpdateRequest) GetClass() *Class {
 }
 
 type ClassUuid struct {
-	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
+	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -276,7 +276,7 @@ func (m *ClassUuid) GetClassUuid() int32 {
 }
 
 type GetClassesResponse struct {
-	Classes              []*ClassWithUuid `protobuf:"bytes,1,rep,name=classes,proto3" json:"classes,omitempty"`
+	Classes              []*ClassWithUuid `protobuf:"bytes,1,rep,name=classes,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
@@ -315,8 +315,8 @@ func (m *GetClassesResponse) GetClasses() []*ClassWithUuid {
 }
 
 type ClassWithUuid struct {
-	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"classUuid,omitempty"`
-	Class                *Class   `protobuf:"bytes,2,opt,name=class,proto3" json:"class,omitempty"`
+	ClassUuid            int32    `protobuf:"varint,1,opt,name=classUuid,proto3" json:"1,omitempty"`
+	Class                *Class   `protobuf:"bytes,2,opt,name=class,proto3" json:"2,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -393,8 +393,8 @@ func (m *Empty) XXX_DiscardUnknown() {
 var xxx_messageInfo_Empty proto.InternalMessageInfo
 
 type JoinClassRequest struct {
-	SecretCode           string   `protobuf:"bytes,1,opt,name=secretCode,proto3" json:"secretCode,omitempty"`
-	User                 *User    `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	SecretCode           string   `protobuf:"bytes,1,opt,name=secretCode,proto3" json:"1,omitempty"`
+	User                 *User    `protobuf:"bytes,2,opt,name=user,proto3" json:"2,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -520,7 +520,7 @@ func (*Assigment) XXX_OneofWrappers() []interface{} {
 }
 
 type JoinAssigmentLoopRequest struct {
-	User                 *User    `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	User                 *User    `protobuf:"bytes,1,opt,name=user,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`

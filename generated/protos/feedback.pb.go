@@ -25,9 +25,9 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Feedback struct {
-	Note                 float64  `protobuf:"fixed64,1,opt,name=note,proto3" json:"note,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Comment              string   `protobuf:"bytes,3,opt,name=comment,proto3" json:"comment,omitempty"`
+	Note                 float64  `protobuf:"fixed64,1,opt,name=note,proto3" json:"1,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"2,omitempty"`
+	Comment              string   `protobuf:"bytes,3,opt,name=comment,proto3" json:"3,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
