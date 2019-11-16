@@ -49,19 +49,18 @@ func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer 
 
 	for index, student := range students {
 		StudentCorrectAnswer[student] = correctAnswer
-
 		var stream = StudentQuizStream[student]
 		if assignToSubGroup {
 			_ = stream.Send(&Question{
-				ClassId:        classId,
-				ClosedQuestion: false,
+				ClassId:        class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClosedQuestion: true,
 				Answers:        possibleAnswers,
 				GroupId:        string(index % numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
-				ClassId:        classId,
-				ClosedQuestion: false,
+				ClassId:        class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClosedQuestion: true,
 				Answers:        possibleAnswers,
 			})
 		}
@@ -75,13 +74,13 @@ func SendPhotoQuestion(classId string, assignToSubGroup bool, numberOfGroups int
 		var stream = StudentQuizStream[student]
 		if assignToSubGroup {
 			_ = stream.Send(&Question{
-				ClassId:       classId,
+				ClassId:       class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				PhotoQuestion: true,
 				GroupId:       string(index % numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
-				ClassId:       classId,
+				ClassId:       class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				PhotoQuestion: true,
 			})
 		}

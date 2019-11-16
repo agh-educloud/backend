@@ -19,7 +19,8 @@ import (
 
 var webCreatedClasses []*web_gen.ClassWithUuid
 
-var codesToClassUuid = make(map[string]string)
+var CodesToClassUuid = make(map[string]string)
+var ClassUuidToCode = make(map[string]string)
 
 // ClassID -> List[StudentID]
 var AllStudentsInClass = make(map[string][]string)
@@ -31,8 +32,8 @@ func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.Cha
 }
 
 func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.JoinClassRequest) (*grpc_gen.Status, error) {
-	if _, ok := codesToClassUuid[request.SecretCode]; ok {
-		var classId = codesToClassUuid[request.SecretCode]
+	if _, ok := CodesToClassUuid[request.SecretCode]; ok {
+		var classId = CodesToClassUuid[request.SecretCode]
 		AllStudentsInClass[classId] = append(AllStudentsInClass[classId], request.User.Uuid)
 
 		return &grpc_gen.Status{Code: grpc_gen.Status_OK}, nil
@@ -201,7 +202,8 @@ func startClass(writer http.ResponseWriter, request *http.Request) {
 		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
 			var code = generateCode()
-			codesToClassUuid[code] = classUuid
+			CodesToClassUuid[code] = classUuid
+			ClassUuidToCode[classUuid] = code
 			log.Println("Created secret code for class " + classUuid + " : " + code)
 			return
 		}
