@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "educloud";
+
+import "protos/grpc/status.proto";
+import "protos/grpc/quiz.proto";
+import "protos/grpc/homework.proto";
+import "protos/grpc/chat.proto";
+import "protos/grpc/user.proto";
+
+
+service UserClassService {
+    rpc JoinClass (JoinClassRequest) returns (Status);
+    rpc SendMessageToPresenter (ChatMessage) returns (Status);
+}
+
+message JoinClassRequest {
+    string secretCode = 1;
+    User user = 2;
+}

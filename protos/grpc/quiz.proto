@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "educloud";
+
+import "protos/grpc/status.proto";
+
+service QuizService {
+    rpc WaitForQuestions (QuizRequest) returns (stream Question);
+    rpc AnswerQuestion (QuizAnswer) returns (Status);
+}
+
+message QuizRequest {
+    string userId = 1;
+}
+
+message QuizAnswer {
+    string userId = 1;
+    string answer = 2;
+    bytes photo = 3;
+}
+
+message Question {
+    string classId = 1;
+    string groupId = 2;
+    repeated string answers = 3;
+    bool photoQuestion = 4;
+    bool closedQuestion = 5;
+    bool openQuestion = 6;
+}
+

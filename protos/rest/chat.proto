@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "educloud-web";
+
+import "protos/rest/user.proto";
+
+service RestChatService {
+    rpc ReceiveMessages (RestUser) returns (stream RestChatMessage);
+}
+
+message RestChatMessage {
+    RestUser sender = 1;
+    RestMessage message = 2;
+    string code = 3;
+}
+
+message RestMessage {
+    string content = 1;
+    string timeStamp = 2;
+}

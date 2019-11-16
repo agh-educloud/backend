@@ -1,7 +1,8 @@
 package class
 
 import (
-	. "../generated/protos"
+	grpc_gen "../generated/protos/grpc"
+	web_gen "../generated/protos/rest"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -16,17 +17,21 @@ import (
 	"strconv"
 )
 
-var webCreatedClasses []*ClassWithUuid
+var webCreatedClasses []*web_gen.ClassWithUuid
 
 var codesToClassUuid = make(map[string]string)
 
 type classUserService struct{}
 
-func (s *classUserService) JoinClass(ctx context.Context, request *JoinClassRequest) (*Status, error) {
+func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.ChatMessage) (*grpc_gen.Status, error) {
+	panic("implement me")
+}
+
+func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.JoinClassRequest) (*grpc_gen.Status, error) {
 	if _, ok := codesToClassUuid[request.SecretCode]; ok {
-		return &Status{Code: Status_OK}, nil
+		return &grpc_gen.Status{Code: grpc_gen.Status_OK}, nil
 	} else {
-		return &Status{Code: Status_DENIED}, nil
+		return &grpc_gen.Status{Code: grpc_gen.Status_DENIED}, nil
 	}
 }
 
@@ -37,7 +42,7 @@ func StartServer() {
 	}
 
 	chatServer := grpc.NewServer()
-	RegisterUserClassServiceServer(chatServer, &classUserService{})
+	grpc_gen.RegisterUserClassServiceServer(chatServer, &classUserService{})
 
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")
@@ -82,7 +87,7 @@ func deleteClass(writer http.ResponseWriter, request *http.Request) {
 func getAllClasses(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 
-	var response = GetClassesResponse{Classes: webCreatedClasses}
+	var response = web_gen.GetClassesResponse{Classes: webCreatedClasses}
 	_ = json.NewEncoder(writer).Encode(response)
 
 }
@@ -110,7 +115,7 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		_, _ = fmt.Fprintf(writer, "Kindly enter data with the event title and description only in order to update")
 	}
 
-	var class Class
+	var class web_gen.RestClass
 
 	err = class.XXX_Unmarshal(reqBody)
 
@@ -122,13 +127,13 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 
 	var nextUuid = int32(len(webCreatedClasses) + 1)
 
-	webCreatedClasses = append(webCreatedClasses, &ClassWithUuid{
+	webCreatedClasses = append(webCreatedClasses, &web_gen.ClassWithUuid{
 		ClassUuid: nextUuid,
 		Class:     &class,
 	})
 	log.Println("Created class")
 
-	var response = ClassCreationResponse{
+	var response = web_gen.ClassCreationResponse{
 		ClassUuid:  nextUuid,
 		SecretCode: 12345,
 		Error:      nil,
@@ -146,7 +151,7 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 
 	reqBody, err := ioutil.ReadAll(request.Body)
 
-	var class ClassUpdateRequest
+	var class web_gen.ClassUpdateRequest
 
 	err = class.XXX_Unmarshal(reqBody)
 	err = json.Unmarshal(reqBody, &class)
@@ -172,7 +177,7 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 
 	log.Println("Updated class")
 
-	var response = Status{Code: Status_OK}
+	var response = web_gen.RestStatus{Code: web_gen.RestStatus_OK}
 
 	writer.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(writer).Encode(response)
