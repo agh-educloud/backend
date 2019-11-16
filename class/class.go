@@ -189,8 +189,9 @@ func startClass(writer http.ResponseWriter, request *http.Request) {
 	for _, v := range webCreatedClasses {
 		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
-			codesToClassUuid[classUuid] = generateCode()
-			log.Println("Created secret code for class " + classUuid + " : " + codesToClassUuid[classUuid])
+			var code = generateCode()
+			codesToClassUuid[code] = classUuid
+			log.Println("Created secret code for class " + classUuid + " : " + code)
 			return
 		}
 	}
