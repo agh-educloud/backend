@@ -2,8 +2,8 @@ syntax = "proto3";
 
 option go_package = "educloud";
 
-import "protos/user.proto";
-import "protos/status.proto";
+import "protos/grpc/user.proto";
+import "protos/grpc/status.proto";
 
 service ChatService {
     rpc ReceiveMessages (User) returns (stream ChatMessage);

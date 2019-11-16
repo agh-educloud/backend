@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "educloud-web";
+
+import "protos/rest/status.proto";
+
+service PresenterHomeworkService {
+    rpc CreateHomework (CreateRestHomeworkRequest) returns (RestStatus);
+}
+
+message CreateRestHomeworkRequest {
+    int32 homeworkUuid = 1;
+    string url = 2;
+    string mailTo = 3;
+}
+
+message RestHomework {
+    repeated RestHomework homework = 1;
+}

@@ -2,11 +2,7 @@ syntax = "proto3";
 
 option go_package = "educloud";
 
-import "protos/status.proto";
-
-service PresenterHomeworkService {
-    rpc CreateHomework (Homework) returns (Status);
-}
+import "protos/grpc/status.proto";
 
 service UserHomeworkService {
     rpc SendHomeworkSolution (Homework) returns (Status);

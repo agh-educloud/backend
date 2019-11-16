@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mkdir -p vendor/github.com/generated
+mkdir -p generated/protos/grpc
 
-for filename in protos/*.proto; do
-    protoc protos/${filename##*/} --go_out=plugins=grpc:vendor/github.com/generated
+for filename in protos/grpc/*.proto; do
+    protoc protos/${filename##*/} --go_out=plugins=grpc:generated
 done

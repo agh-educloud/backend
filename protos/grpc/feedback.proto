@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "educloud";
 
-import "protos/status.proto";
+import "protos/grpc/status.proto";
 
 service FeedbackService {
     rpc SendFeedback (Feedback) returns (Status);

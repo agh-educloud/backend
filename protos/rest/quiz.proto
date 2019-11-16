@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "educloud-web";
+
+import "protos/rest/status.proto";
+
+service PresenterQuizService{
+    rpc DelegateQuizQuestion (RestQuizQuestion) returns (RestStatus);
+    rpc GetQuizQuestionStatistics (RestQuizQuestion) returns (stream QuizQuestionStatistics);
+}
+
+message RestQuizQuestion {
+    int32 uuid = 1;
+    string question = 2;
+    string hint = 3;
+    repeated RestOption option = 4;
+}
+
+message RestOption {
+    string value = 1;
+}
+
+message QuizQuestionCreation {
+    RestQuizQuestion quizQuestion = 1;
+    RestOption answer = 2;
+}
+
+message QuizQuestionStatistics{
+    int32 questionUuid = 1;
+    float percentageOfCorrectAnswers = 2;
+    int32 participants = 3;
+}
+
