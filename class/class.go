@@ -33,7 +33,6 @@ func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.Join
 	} else {
 		return &grpc_gen.Status{Code: grpc_gen.Status_DENIED}, nil
 	}
-	return Status_DENIED
 }
 
 func StartServer() {

@@ -1,7 +1,7 @@
 package feedback
 
 import (
-	. "backend/generated/protos"
+	. "../generated/protos/grpc"
 	"context"
 	"google.golang.org/grpc"
 	"log"
