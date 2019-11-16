@@ -21,6 +21,9 @@ var webCreatedClasses []*web_gen.ClassWithUuid
 
 var codesToClassUuid = make(map[string]string)
 
+// ClassID -> List[StudentID]
+var AllStudentsInClass = make(map[string][]string)
+
 type classUserService struct{}
 
 func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.ChatMessage) (*grpc_gen.Status, error) {
@@ -29,6 +32,9 @@ func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.Cha
 
 func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.JoinClassRequest) (*grpc_gen.Status, error) {
 	if _, ok := codesToClassUuid[request.SecretCode]; ok {
+		var classId = codesToClassUuid[request.SecretCode]
+		AllStudentsInClass[classId] = append(AllStudentsInClass[classId], request.User.Uuid)
+
 		return &grpc_gen.Status{Code: grpc_gen.Status_OK}, nil
 	} else {
 		return &grpc_gen.Status{Code: grpc_gen.Status_DENIED}, nil

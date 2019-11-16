@@ -31,7 +31,5 @@ func main() {
 	wg.Add(6)
 	go quiz.StartServer()
 
-	go quiz.Simulate()
-
 	wg.Wait()
 }

@@ -1,23 +1,28 @@
 package quiz
 
 import (
+	"../class"
 	. "../generated/protos/grpc"
 	"context"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
 
-var streams = make(map[string]QuizService_WaitForQuestionsServer)
+var StudentQuizStream = make(map[string]QuizService_WaitForQuestionsServer)
+var StudentCorrectAnswer = make(map[string]string)
+var StudentPhotoAnswer = make(map[string]string)
+
 var mutex = &sync.Mutex{}
 
 type quizServiceServer struct{}
 
 func (s *quizServiceServer) WaitForQuestions(request *QuizRequest, stream QuizService_WaitForQuestionsServer) error {
 	mutex.Lock()
-	streams[request.UserId] = stream
+	StudentQuizStream[request.UserId] = stream
 	mutex.Unlock()
 
 	time.Sleep(24 * time.Hour)
@@ -26,20 +31,61 @@ func (s *quizServiceServer) WaitForQuestions(request *QuizRequest, stream QuizSe
 }
 
 func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnswer) (*Status, error) {
-	if answer.Answer == "A" {
-		return &Status{Code: Status_OK}, nil
+	if _, ok := StudentCorrectAnswer[answer.UserId]; ok {
+		var expectedAnswer = StudentCorrectAnswer[answer.UserId]
+		if expectedAnswer == answer.Answer {
+			return &Status{Code: Status_OK}, nil
+		}
+		if strings.HasPrefix(answer.Answer, "http") {
+			StudentPhotoAnswer[answer.UserId] = answer.Answer
+			return &Status{Code: Status_OK}, nil
+		}
 	}
 	return &Status{Code: Status_DENIED}, nil
 }
 
-func Simulate() {
-	//for {
-	time.Sleep(30 * time.Second)
-	println("SENDING QUIZ")
-	for _, stream := range streams {
-		_ = stream.Send(&Question{ClassId: "11111", PhotoQuestion: true, ClosedQuestion: false, Answers: []string{"A", "BE", "CE", "DE"}})
+func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer string, assignToSubGroup bool, numberOfGroups int) {
+	var students = class.AllStudentsInClass[classId]
+
+	for index, student := range students {
+		StudentCorrectAnswer[student] = correctAnswer
+
+		var stream = StudentQuizStream[student]
+		if assignToSubGroup {
+			_ = stream.Send(&Question{
+				ClassId:        classId,
+				ClosedQuestion: false,
+				Answers:        possibleAnswers,
+				GroupId:        string(index % numberOfGroups),
+			})
+		} else {
+			_ = stream.Send(&Question{
+				ClassId:        classId,
+				ClosedQuestion: false,
+				Answers:        possibleAnswers,
+			})
+		}
 	}
-	//}
+}
+
+func SendPhotoQuestion(classId string, assignToSubGroup bool, numberOfGroups int) {
+	var students = class.AllStudentsInClass[classId]
+
+	for index, student := range students {
+		var stream = StudentQuizStream[student]
+		if assignToSubGroup {
+			_ = stream.Send(&Question{
+				ClassId:       classId,
+				PhotoQuestion: true,
+				GroupId:       string(index % numberOfGroups),
+			})
+		} else {
+			_ = stream.Send(&Question{
+				ClassId:       classId,
+				PhotoQuestion: true,
+			})
+		}
+	}
 }
 
 func StartServer() {

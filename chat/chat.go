@@ -10,22 +10,22 @@ import (
 	"time"
 )
 
-var streams = make(map[string]ChatService_ReceiveMessagesServer)
+var StudentChatStreams = make(map[string]ChatService_ReceiveMessagesServer)
 var mutex = &sync.Mutex{}
 
 type chatServiceServer struct{}
 
 func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessage) (*Status, error) {
-	for _, stream := range streams {
+	for _, stream := range StudentChatStreams {
 		_ = stream.Send(message)
 	}
-	println("MULTICASTED", message.Message.Content)
+	println("Message -> ", message.Message.Content)
 	return &Status{}, nil
 }
 
 func (s *chatServiceServer) ReceiveMessages(user *User, stream ChatService_ReceiveMessagesServer) error {
 	mutex.Lock()
-	streams[user.Uuid] = stream
+	StudentChatStreams[user.Uuid] = stream
 	mutex.Unlock()
 
 	time.Sleep(24 * time.Hour)
@@ -38,7 +38,6 @@ func StartServer() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-
 	chatServer := grpc.NewServer()
 	RegisterChatServiceServer(chatServer, &chatServiceServer{})
 
