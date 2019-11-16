@@ -6,15 +6,18 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"strings"
 )
 
-var feedbacks = make([]*Feedback, 0, 10)
+var FeedbackPerSurname = make(map[string][]Feedback)
 
 type feedbackServiceServer struct{}
 
 func (s *feedbackServiceServer) SendFeedback(ctx context.Context, fb *Feedback) (*Status, error) {
-	feedbacks = append(feedbacks, fb)
-	print("GOT FEEDBACK", fb.Name, fb.Note)
+	var surname = strings.ToTitle(fb.Name)
+	FeedbackPerSurname[surname] = append(FeedbackPerSurname[surname], *fb)
+
+	println("Saved feedback for", surname)
 	return &Status{}, nil
 }
 
