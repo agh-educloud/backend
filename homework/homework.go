@@ -1,7 +1,7 @@
 package homework
 
 import (
-	. "../generated/protos"
+	. "backend/generated/protos"
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -9,7 +9,6 @@ import (
 )
 
 var homeworks = make([]*Homework, 0, 10)
-var count = 0
 
 type userHomeworkServiceServer struct{}
 
@@ -32,7 +31,6 @@ func StartServer() {
 
 	chatServer := grpc.NewServer()
 	RegisterUserHomeworkServiceServer(chatServer, &userHomeworkServiceServer{})
-	print("XD")
 	if err := chatServer.Serve(lis); err != nil {
 		println("Chat server failed")
 	}

@@ -33,6 +33,7 @@ func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.Join
 	} else {
 		return &grpc_gen.Status{Code: grpc_gen.Status_DENIED}, nil
 	}
+	return Status_DENIED
 }
 
 func StartServer() {
@@ -138,7 +139,7 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		SecretCode: 12345,
 		Error:      nil,
 	}
-
+	//marshalled, _ := response.XXX_Marshal(reqBody,false)
 	writer.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(writer).Encode(response)
 }
@@ -194,8 +195,9 @@ func startClass(writer http.ResponseWriter, request *http.Request) {
 	for _, v := range webCreatedClasses {
 		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
-			codesToClassUuid[classUuid] = generateCode()
-			log.Println("Created secret code for class " + classUuid + " : " + codesToClassUuid[classUuid])
+			var code = generateCode()
+			codesToClassUuid[code] = classUuid
+			log.Println("Created secret code for class " + classUuid + " : " + code)
 			return
 		}
 	}

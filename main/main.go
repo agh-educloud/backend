@@ -1,6 +1,11 @@
 package main
 
 import (
+	"backend/chat"
+	"backend/class"
+	"backend/feedback"
+	"backend/homework"
+	"backend/quiz"
 	"../class"
 	"sync"
 )
@@ -22,7 +27,12 @@ func main() {
 	go feedback.StartServer()
 
 	wg.Add(5)
-	class.Start()
+	go class.Start()
 
-	//wg.Wait()
+	wg.Add(6)
+	go quiz.StartServer()
+
+	go quiz.Simulate()
+
+	wg.Wait()
 }
