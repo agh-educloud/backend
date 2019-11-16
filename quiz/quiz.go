@@ -55,7 +55,7 @@ func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer 
 				ClassId:        class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				ClosedQuestion: true,
 				Answers:        possibleAnswers,
-				GroupId:        string(index % numberOfGroups),
+				GroupId:        class.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
@@ -76,7 +76,7 @@ func SendPhotoQuestion(classId string, assignToSubGroup bool, numberOfGroups int
 			_ = stream.Send(&Question{
 				ClassId:       class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				PhotoQuestion: true,
-				GroupId:       string(index % numberOfGroups),
+				GroupId:       class.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
