@@ -24,153 +24,43 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type RestQuizQuestion struct {
-	Uuid                 int32         `protobuf:"varint,1,opt,name=uuid,proto3" json:"1,omitempty"`
-	Question             string        `protobuf:"bytes,2,opt,name=question,proto3" json:"2,omitempty"`
-	Hint                 string        `protobuf:"bytes,3,opt,name=hint,proto3" json:"3,omitempty"`
-	Option               []*RestOption `protobuf:"bytes,4,rep,name=option,proto3" json:"4,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
-	XXX_unrecognized     []byte        `json:"-"`
-	XXX_sizecache        int32         `json:"-"`
-}
-
-func (m *RestQuizQuestion) Reset()         { *m = RestQuizQuestion{} }
-func (m *RestQuizQuestion) String() string { return proto.CompactTextString(m) }
-func (*RestQuizQuestion) ProtoMessage()    {}
-func (*RestQuizQuestion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f8b10dacb9b761f8, []int{0}
-}
-
-func (m *RestQuizQuestion) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_RestQuizQuestion.Unmarshal(m, b)
-}
-func (m *RestQuizQuestion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_RestQuizQuestion.Marshal(b, m, deterministic)
-}
-func (m *RestQuizQuestion) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RestQuizQuestion.Merge(m, src)
-}
-func (m *RestQuizQuestion) XXX_Size() int {
-	return xxx_messageInfo_RestQuizQuestion.Size(m)
-}
-func (m *RestQuizQuestion) XXX_DiscardUnknown() {
-	xxx_messageInfo_RestQuizQuestion.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RestQuizQuestion proto.InternalMessageInfo
-
-func (m *RestQuizQuestion) GetUuid() int32 {
-	if m != nil {
-		return m.Uuid
-	}
-	return 0
-}
-
-func (m *RestQuizQuestion) GetQuestion() string {
-	if m != nil {
-		return m.Question
-	}
-	return ""
-}
-
-func (m *RestQuizQuestion) GetHint() string {
-	if m != nil {
-		return m.Hint
-	}
-	return ""
-}
-
-func (m *RestQuizQuestion) GetOption() []*RestOption {
-	if m != nil {
-		return m.Option
-	}
-	return nil
-}
-
-type RestOption struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"1,omitempty"`
+type RestQuizQuestionUuid struct {
+	Uuid                 int32    `protobuf:"varint,1,opt,name=uuid,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *RestOption) Reset()         { *m = RestOption{} }
-func (m *RestOption) String() string { return proto.CompactTextString(m) }
-func (*RestOption) ProtoMessage()    {}
-func (*RestOption) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f8b10dacb9b761f8, []int{1}
+func (m *RestQuizQuestionUuid) Reset()         { *m = RestQuizQuestionUuid{} }
+func (m *RestQuizQuestionUuid) String() string { return proto.CompactTextString(m) }
+func (*RestQuizQuestionUuid) ProtoMessage()    {}
+func (*RestQuizQuestionUuid) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f8b10dacb9b761f8, []int{0}
 }
 
-func (m *RestOption) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_RestOption.Unmarshal(m, b)
+func (m *RestQuizQuestionUuid) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RestQuizQuestionUuid.Unmarshal(m, b)
 }
-func (m *RestOption) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_RestOption.Marshal(b, m, deterministic)
+func (m *RestQuizQuestionUuid) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RestQuizQuestionUuid.Marshal(b, m, deterministic)
 }
-func (m *RestOption) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RestOption.Merge(m, src)
+func (m *RestQuizQuestionUuid) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RestQuizQuestionUuid.Merge(m, src)
 }
-func (m *RestOption) XXX_Size() int {
-	return xxx_messageInfo_RestOption.Size(m)
+func (m *RestQuizQuestionUuid) XXX_Size() int {
+	return xxx_messageInfo_RestQuizQuestionUuid.Size(m)
 }
-func (m *RestOption) XXX_DiscardUnknown() {
-	xxx_messageInfo_RestOption.DiscardUnknown(m)
+func (m *RestQuizQuestionUuid) XXX_DiscardUnknown() {
+	xxx_messageInfo_RestQuizQuestionUuid.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RestOption proto.InternalMessageInfo
+var xxx_messageInfo_RestQuizQuestionUuid proto.InternalMessageInfo
 
-func (m *RestOption) GetValue() string {
+func (m *RestQuizQuestionUuid) GetUuid() int32 {
 	if m != nil {
-		return m.Value
+		return m.Uuid
 	}
-	return ""
-}
-
-type QuizQuestionCreation struct {
-	QuizQuestion         *RestQuizQuestion `protobuf:"bytes,1,opt,name=quizQuestion,proto3" json:"1,omitempty"`
-	Answer               *RestOption       `protobuf:"bytes,2,opt,name=answer,proto3" json:"2,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
-}
-
-func (m *QuizQuestionCreation) Reset()         { *m = QuizQuestionCreation{} }
-func (m *QuizQuestionCreation) String() string { return proto.CompactTextString(m) }
-func (*QuizQuestionCreation) ProtoMessage()    {}
-func (*QuizQuestionCreation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f8b10dacb9b761f8, []int{2}
-}
-
-func (m *QuizQuestionCreation) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_QuizQuestionCreation.Unmarshal(m, b)
-}
-func (m *QuizQuestionCreation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_QuizQuestionCreation.Marshal(b, m, deterministic)
-}
-func (m *QuizQuestionCreation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuizQuestionCreation.Merge(m, src)
-}
-func (m *QuizQuestionCreation) XXX_Size() int {
-	return xxx_messageInfo_QuizQuestionCreation.Size(m)
-}
-func (m *QuizQuestionCreation) XXX_DiscardUnknown() {
-	xxx_messageInfo_QuizQuestionCreation.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QuizQuestionCreation proto.InternalMessageInfo
-
-func (m *QuizQuestionCreation) GetQuizQuestion() *RestQuizQuestion {
-	if m != nil {
-		return m.QuizQuestion
-	}
-	return nil
-}
-
-func (m *QuizQuestionCreation) GetAnswer() *RestOption {
-	if m != nil {
-		return m.Answer
-	}
-	return nil
+	return 0
 }
 
 type QuizQuestionStatistics struct {
@@ -186,7 +76,7 @@ func (m *QuizQuestionStatistics) Reset()         { *m = QuizQuestionStatistics{}
 func (m *QuizQuestionStatistics) String() string { return proto.CompactTextString(m) }
 func (*QuizQuestionStatistics) ProtoMessage()    {}
 func (*QuizQuestionStatistics) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f8b10dacb9b761f8, []int{3}
+	return fileDescriptor_f8b10dacb9b761f8, []int{1}
 }
 
 func (m *QuizQuestionStatistics) XXX_Unmarshal(b []byte) error {
@@ -229,39 +119,31 @@ func (m *QuizQuestionStatistics) GetParticipants() int32 {
 }
 
 func init() {
-	proto.RegisterType((*RestQuizQuestion)(nil), "RestQuizQuestion")
-	proto.RegisterType((*RestOption)(nil), "RestOption")
-	proto.RegisterType((*QuizQuestionCreation)(nil), "QuizQuestionCreation")
+	proto.RegisterType((*RestQuizQuestionUuid)(nil), "RestQuizQuestionUuid")
 	proto.RegisterType((*QuizQuestionStatistics)(nil), "QuizQuestionStatistics")
 }
 
 func init() { proto.RegisterFile("protos/rest/quiz.proto", fileDescriptor_f8b10dacb9b761f8) }
 
 var fileDescriptor_f8b10dacb9b761f8 = []byte{
-	// 355 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0x4f, 0x4f, 0xf2, 0x40,
-	0x10, 0xc6, 0x53, 0xfe, 0xe5, 0x65, 0x21, 0x6f, 0x74, 0xd3, 0x60, 0xed, 0x89, 0xd4, 0x0b, 0x17,
-	0x8b, 0xc1, 0xe8, 0xd1, 0x44, 0x31, 0x31, 0x9e, 0x90, 0x25, 0x5e, 0xbc, 0x2d, 0x65, 0xc4, 0x4d,
-	0x48, 0x5b, 0x76, 0x67, 0x21, 0xc1, 0x4f, 0xe2, 0xcd, 0x8f, 0x6a, 0x3a, 0x25, 0xd2, 0x22, 0x7a,
-	0xdb, 0xfd, 0xcd, 0xb3, 0xfb, 0xcc, 0x33, 0xbb, 0xac, 0x93, 0xea, 0x04, 0x13, 0xd3, 0xd7, 0x60,
-	0xb0, 0xbf, 0xb4, 0x6a, 0x13, 0x12, 0xf0, 0xbd, 0x22, 0x37, 0x28, 0xd1, 0x9a, 0xbc, 0x12, 0xbc,
-	0xb3, 0x23, 0x01, 0x06, 0xc7, 0x56, 0x6d, 0xc6, 0x16, 0x0c, 0xaa, 0x24, 0xe6, 0x9c, 0xd5, 0xac,
-	0x55, 0x33, 0xcf, 0xe9, 0x3a, 0xbd, 0xba, 0xa0, 0x35, 0xf7, 0xd9, 0xbf, 0xe5, 0xb6, 0xee, 0x55,
-	0xba, 0x4e, 0xaf, 0x29, 0xbe, 0xf7, 0x99, 0xfe, 0x4d, 0xc5, 0xe8, 0x55, 0x89, 0xd3, 0x9a, 0x9f,
-	0xb1, 0x46, 0x92, 0x92, 0xba, 0xd6, 0xad, 0xf6, 0x5a, 0x83, 0x56, 0x98, 0xd9, 0x8c, 0x08, 0x89,
-	0x6d, 0x29, 0x08, 0x18, 0xdb, 0x51, 0xee, 0xb2, 0xfa, 0x4a, 0x2e, 0x2c, 0x90, 0x6f, 0x53, 0xe4,
-	0x9b, 0x40, 0x33, 0xb7, 0xd8, 0xdc, 0x50, 0x83, 0x24, 0xf5, 0x15, 0x6b, 0x2f, 0x0b, 0x9c, 0x0e,
-	0xb5, 0x06, 0xc7, 0xe1, 0x7e, 0x1a, 0x51, 0x92, 0x65, 0x7d, 0xc9, 0xd8, 0xac, 0x41, 0x53, 0x8a,
-	0xfd, 0xbe, 0xf2, 0x52, 0xf0, 0xe9, 0xb0, 0x4e, 0xf1, 0x8e, 0x09, 0x4a, 0x54, 0x06, 0x55, 0x64,
-	0x78, 0x90, 0xd9, 0xe6, 0xf4, 0x79, 0x37, 0xa3, 0x12, 0xe3, 0x37, 0xcc, 0x4f, 0x41, 0x47, 0x10,
-	0xa3, 0x9c, 0xc3, 0xe8, 0x75, 0x98, 0x68, 0x0d, 0x11, 0xde, 0xd2, 0xdd, 0x86, 0x7c, 0x2b, 0xe2,
-	0x0f, 0x45, 0xe6, 0x91, 0x4a, 0x8d, 0x2a, 0x52, 0xa9, 0x8c, 0xd1, 0xd0, 0x5c, 0xeb, 0xa2, 0xc4,
-	0x06, 0x1f, 0x0e, 0x73, 0x9f, 0x34, 0x18, 0x88, 0x11, 0x74, 0xd6, 0xeb, 0x04, 0xf4, 0x4a, 0x45,
-	0xc0, 0xaf, 0x99, 0x7b, 0x0f, 0x0b, 0x98, 0x4b, 0x84, 0xd2, 0xa3, 0xfe, 0x9c, 0x8c, 0x9f, 0x67,
-	0x9f, 0xd0, 0x77, 0xe0, 0x8f, 0xec, 0xf4, 0x01, 0xf0, 0x97, 0xd4, 0x07, 0x0e, 0x9f, 0x84, 0x87,
-	0xb5, 0x17, 0xce, 0xdd, 0xff, 0x97, 0x36, 0xcc, 0x6c, 0xb4, 0x48, 0xec, 0xec, 0x7c, 0x0d, 0xd3,
-	0x69, 0x83, 0xbe, 0xda, 0xe5, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x77, 0x59, 0x2f, 0x3a, 0x9e,
-	0x02, 0x00, 0x00,
+	// 265 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0x4f, 0x4b, 0x03, 0x31,
+	0x10, 0xc5, 0x49, 0xfd, 0x73, 0x88, 0xc5, 0x43, 0x58, 0xeb, 0xba, 0xa7, 0xb2, 0xa7, 0x22, 0xb8,
+	0x15, 0xbd, 0x79, 0x10, 0xfc, 0x03, 0x9e, 0x44, 0xbb, 0x8b, 0x17, 0x6f, 0x69, 0x76, 0x2c, 0x03,
+	0x65, 0x77, 0x3b, 0x33, 0xb1, 0xd0, 0x4f, 0xa3, 0xdf, 0x54, 0x9a, 0x7a, 0x88, 0xd0, 0x7a, 0x0b,
+	0xbf, 0xbc, 0x97, 0x97, 0x37, 0xa3, 0x07, 0x1d, 0xb5, 0xd2, 0xf2, 0x98, 0x80, 0x65, 0xbc, 0xf0,
+	0xb8, 0x2a, 0x02, 0xc8, 0xd2, 0x98, 0xb3, 0x58, 0xf1, 0xbc, 0xb9, 0xc9, 0xcf, 0x75, 0x52, 0x02,
+	0xcb, 0xc4, 0xe3, 0x6a, 0xe2, 0x81, 0x05, 0xdb, 0xe6, 0xcd, 0x63, 0x6d, 0x8c, 0xde, 0xf7, 0x1e,
+	0xeb, 0x54, 0x0d, 0xd5, 0xe8, 0xa0, 0x0c, 0xe7, 0xfc, 0x4b, 0xe9, 0x41, 0x2c, 0xac, 0xc4, 0x0a,
+	0xb2, 0xa0, 0x63, 0x93, 0xeb, 0xfe, 0x22, 0xb2, 0xff, 0xda, 0xfe, 0x30, 0x73, 0xab, 0xb3, 0x0e,
+	0xc8, 0x41, 0x23, 0x76, 0x06, 0x2f, 0x1f, 0x0f, 0x2d, 0x11, 0x38, 0xb9, 0x6b, 0x78, 0x09, 0xc4,
+	0x69, 0x6f, 0xa8, 0x46, 0xbd, 0xf2, 0x1f, 0xc5, 0x3a, 0xa3, 0xb3, 0x24, 0xe8, 0xb0, 0xb3, 0x8d,
+	0x70, 0xba, 0xb7, 0xc9, 0x88, 0xd9, 0xd5, 0xb7, 0xd2, 0xc9, 0x2b, 0x01, 0x43, 0x23, 0x40, 0xeb,
+	0xbf, 0x56, 0x40, 0x9f, 0xe8, 0xc0, 0xdc, 0xe8, 0xe4, 0x11, 0xe6, 0x30, 0xb3, 0x02, 0x71, 0x05,
+	0x73, 0x52, 0x6c, 0xab, 0x9f, 0x1d, 0x05, 0x5c, 0x85, 0x49, 0x99, 0x67, 0x7d, 0xf6, 0x04, 0xb2,
+	0xa3, 0xf9, 0x8e, 0x07, 0x4e, 0x8b, 0xed, 0xfa, 0x4b, 0x75, 0x7f, 0xfc, 0xde, 0x87, 0xda, 0xbb,
+	0x79, 0xeb, 0xeb, 0x8b, 0x25, 0x4c, 0xa7, 0x87, 0x61, 0x13, 0xd7, 0x3f, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0x6f, 0xcc, 0x4c, 0x63, 0xbd, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -276,8 +158,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PresenterQuizServiceClient interface {
-	DelegateQuizQuestion(ctx context.Context, in *RestQuizQuestion, opts ...grpc.CallOption) (*RestStatus, error)
-	GetQuizQuestionStatistics(ctx context.Context, in *RestQuizQuestion, opts ...grpc.CallOption) (PresenterQuizService_GetQuizQuestionStatisticsClient, error)
+	DelegateQuizQuestion(ctx context.Context, in *RestQuizQuestionUuid, opts ...grpc.CallOption) (*RestStatus, error)
+	GetQuizQuestionStatistics(ctx context.Context, in *RestQuizQuestionUuid, opts ...grpc.CallOption) (PresenterQuizService_GetQuizQuestionStatisticsClient, error)
 }
 
 type presenterQuizServiceClient struct {
@@ -288,7 +170,7 @@ func NewPresenterQuizServiceClient(cc *grpc.ClientConn) PresenterQuizServiceClie
 	return &presenterQuizServiceClient{cc}
 }
 
-func (c *presenterQuizServiceClient) DelegateQuizQuestion(ctx context.Context, in *RestQuizQuestion, opts ...grpc.CallOption) (*RestStatus, error) {
+func (c *presenterQuizServiceClient) DelegateQuizQuestion(ctx context.Context, in *RestQuizQuestionUuid, opts ...grpc.CallOption) (*RestStatus, error) {
 	out := new(RestStatus)
 	err := c.cc.Invoke(ctx, "/PresenterQuizService/DelegateQuizQuestion", in, out, opts...)
 	if err != nil {
@@ -297,7 +179,7 @@ func (c *presenterQuizServiceClient) DelegateQuizQuestion(ctx context.Context, i
 	return out, nil
 }
 
-func (c *presenterQuizServiceClient) GetQuizQuestionStatistics(ctx context.Context, in *RestQuizQuestion, opts ...grpc.CallOption) (PresenterQuizService_GetQuizQuestionStatisticsClient, error) {
+func (c *presenterQuizServiceClient) GetQuizQuestionStatistics(ctx context.Context, in *RestQuizQuestionUuid, opts ...grpc.CallOption) (PresenterQuizService_GetQuizQuestionStatisticsClient, error) {
 	stream, err := c.cc.NewStream(ctx, &_PresenterQuizService_serviceDesc.Streams[0], "/PresenterQuizService/GetQuizQuestionStatistics", opts...)
 	if err != nil {
 		return nil, err
@@ -331,18 +213,18 @@ func (x *presenterQuizServiceGetQuizQuestionStatisticsClient) Recv() (*QuizQuest
 
 // PresenterQuizServiceServer is the server API for PresenterQuizService service.
 type PresenterQuizServiceServer interface {
-	DelegateQuizQuestion(context.Context, *RestQuizQuestion) (*RestStatus, error)
-	GetQuizQuestionStatistics(*RestQuizQuestion, PresenterQuizService_GetQuizQuestionStatisticsServer) error
+	DelegateQuizQuestion(context.Context, *RestQuizQuestionUuid) (*RestStatus, error)
+	GetQuizQuestionStatistics(*RestQuizQuestionUuid, PresenterQuizService_GetQuizQuestionStatisticsServer) error
 }
 
 // UnimplementedPresenterQuizServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedPresenterQuizServiceServer struct {
 }
 
-func (*UnimplementedPresenterQuizServiceServer) DelegateQuizQuestion(ctx context.Context, req *RestQuizQuestion) (*RestStatus, error) {
+func (*UnimplementedPresenterQuizServiceServer) DelegateQuizQuestion(ctx context.Context, req *RestQuizQuestionUuid) (*RestStatus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegateQuizQuestion not implemented")
 }
-func (*UnimplementedPresenterQuizServiceServer) GetQuizQuestionStatistics(req *RestQuizQuestion, srv PresenterQuizService_GetQuizQuestionStatisticsServer) error {
+func (*UnimplementedPresenterQuizServiceServer) GetQuizQuestionStatistics(req *RestQuizQuestionUuid, srv PresenterQuizService_GetQuizQuestionStatisticsServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetQuizQuestionStatistics not implemented")
 }
 
@@ -351,7 +233,7 @@ func RegisterPresenterQuizServiceServer(s *grpc.Server, srv PresenterQuizService
 }
 
 func _PresenterQuizService_DelegateQuizQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RestQuizQuestion)
+	in := new(RestQuizQuestionUuid)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -363,13 +245,13 @@ func _PresenterQuizService_DelegateQuizQuestion_Handler(srv interface{}, ctx con
 		FullMethod: "/PresenterQuizService/DelegateQuizQuestion",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenterQuizServiceServer).DelegateQuizQuestion(ctx, req.(*RestQuizQuestion))
+		return srv.(PresenterQuizServiceServer).DelegateQuizQuestion(ctx, req.(*RestQuizQuestionUuid))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PresenterQuizService_GetQuizQuestionStatistics_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(RestQuizQuestion)
+	m := new(RestQuizQuestionUuid)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}

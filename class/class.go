@@ -3,6 +3,8 @@ package class
 import (
 	grpc_gen "../generated/protos/grpc"
 	web_gen "../generated/protos/rest"
+	"../quiz"
+	"./class_commons"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -19,12 +21,6 @@ import (
 
 var webCreatedClasses []*web_gen.ClassWithUuid
 
-var CodesToClassUuid = make(map[string]string)
-var ClassUuidToCode = make(map[string]string)
-
-// ClassID -> List[StudentID]
-var AllStudentsInClass = make(map[string][]string)
-
 type classUserService struct{}
 
 func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.ChatMessage) (*grpc_gen.Status, error) {
@@ -32,9 +28,9 @@ func (s *classUserService) SendMessageToPresenter(context.Context, *grpc_gen.Cha
 }
 
 func (s *classUserService) JoinClass(ctx context.Context, request *grpc_gen.JoinClassRequest) (*grpc_gen.Status, error) {
-	if _, ok := CodesToClassUuid[request.SecretCode]; ok {
-		var classId = CodesToClassUuid[request.SecretCode]
-		AllStudentsInClass[classId] = append(AllStudentsInClass[classId], request.User.Uuid)
+	if _, ok := class_commons.CodesToClassUuid[request.SecretCode]; ok {
+		var classId = class_commons.CodesToClassUuid[request.SecretCode]
+		class_commons.AllStudentsInClass[classId] = append(class_commons.AllStudentsInClass[classId], request.User.Uuid)
 
 		return &grpc_gen.Status{Code: grpc_gen.Status_OK}, nil
 	} else {
@@ -63,6 +59,7 @@ func Start() {
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
 	router.HandleFunc("/class/{id}", startClass).Methods("POST")
+	router.HandleFunc("/quizToDelegate/{id}", delegateQuizQuestion).Methods("POST")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
 	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
@@ -124,13 +121,12 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 
 	var class web_gen.RestClass
 
-	err = class.XXX_Unmarshal(reqBody)
-
 	err = json.Unmarshal(reqBody, &class)
 	if err != nil {
 		fmt.Println("Error while unmarshal")
 	}
 	log.Println(class.Name)
+	//log.Println(class.QuizQuestion[0].Question.Option[0])
 
 	var nextUuid = int32(len(webCreatedClasses) + 1)
 
@@ -172,10 +168,12 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 			if len(class.Class.Name) > 0 {
 				v.Class.Name = class.Class.Name
 				log.Println("Updated class name")
-			} else if len(class.Class.Topic) > 0 {
+			}
+			if len(class.Class.Topic) > 0 {
 				v.Class.Topic = class.Class.Topic
 				log.Println("Updated class topic")
-			} else if len(class.Class.QuizQuestion) > 0 {
+			}
+			if len(class.Class.QuizQuestion) > 0 {
 				v.Class.QuizQuestion = class.Class.QuizQuestion
 				log.Println("Updated class quiz questions")
 			}
@@ -202,14 +200,55 @@ func startClass(writer http.ResponseWriter, request *http.Request) {
 		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
 			var code = generateCode()
-			CodesToClassUuid[code] = classUuid
-			ClassUuidToCode[classUuid] = code
+			class_commons.CodesToClassUuid[code] = classUuid
+			class_commons.ClassUuidToCode[classUuid] = code
 			log.Println("Created secret code for class " + classUuid + " : " + code)
 			return
 		}
 	}
 
 	writer.WriteHeader(http.StatusBadRequest)
+}
+
+func delegateQuizQuestion(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+
+	var classUuid = mux.Vars(request)["id"]
+	log.Println("Delegating quizToSend for class " + classUuid)
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
+
+	reqBody, err := ioutil.ReadAll(request.Body)
+
+	var quizId web_gen.RestQuizQuestionUuid
+
+	err = json.Unmarshal(reqBody, &quizId)
+	if err != nil {
+		fmt.Println("Error while unmarshal")
+	}
+
+	for _, v := range webCreatedClasses {
+		if v.ClassUuid == int32(classUuidInt) {
+			for _, q := range v.Class.QuizQuestion {
+				if q.Uuid == quizId.Uuid {
+					writer.WriteHeader(http.StatusOK)
+					possibleAnswers := getPossibleAnswers(q.Question.Option)
+					quiz.SendClosedQuestion(classUuid, possibleAnswers, q.Question.Answer.Value, true, 1)
+					return
+				}
+			}
+		}
+	}
+
+	writer.WriteHeader(http.StatusBadRequest)
+}
+
+func getPossibleAnswers(options []*web_gen.RestOption) []string {
+	var opt = make([]string, len(options))
+	for i, v := range options {
+		opt[i] = v.Value
+	}
+
+	return opt
 }
 
 var letterRunes = []rune("0123456789")

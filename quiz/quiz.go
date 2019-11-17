@@ -1,7 +1,7 @@
 package quiz
 
 import (
-	"../class"
+	"../class/class_commons"
 	. "../generated/protos/grpc"
 	"context"
 	"google.golang.org/grpc"
@@ -45,21 +45,21 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 }
 
 func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer string, assignToSubGroup bool, numberOfGroups int) {
-	var students = class.AllStudentsInClass[classId]
+	var students = class_commons.AllStudentsInClass[classId]
 
 	for index, student := range students {
 		StudentCorrectAnswer[student] = correctAnswer
 		var stream = StudentQuizStream[student]
 		if assignToSubGroup {
 			_ = stream.Send(&Question{
-				ClassId:        class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				ClosedQuestion: true,
 				Answers:        possibleAnswers,
-				GroupId:        class.ClassUuidToCode[classId] + string(index%numberOfGroups),
+				GroupId:        class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
-				ClassId:        class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				ClosedQuestion: true,
 				Answers:        possibleAnswers,
 			})
@@ -68,19 +68,19 @@ func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer 
 }
 
 func SendPhotoQuestion(classId string, assignToSubGroup bool, numberOfGroups int) {
-	var students = class.AllStudentsInClass[classId]
+	var students = class_commons.AllStudentsInClass[classId]
 
 	for index, student := range students {
 		var stream = StudentQuizStream[student]
 		if assignToSubGroup {
 			_ = stream.Send(&Question{
-				ClassId:       class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClassId:       class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				PhotoQuestion: true,
-				GroupId:       class.ClassUuidToCode[classId] + string(index%numberOfGroups),
+				GroupId:       class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
 		} else {
 			_ = stream.Send(&Question{
-				ClassId:       class.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+				ClassId:       class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				PhotoQuestion: true,
 			})
 		}
