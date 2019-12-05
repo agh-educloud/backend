@@ -1,11 +1,15 @@
 syntax = "proto3";
 
-option go_package = "educloud-web";
-
-import "protos/rest/user.proto";
+import "user.proto";
 
 service RestChatService {
-    rpc ReceiveMessages (RestUser) returns (stream RestChatMessage);
+    rpc GetStudentQuestions (Empty) returns (stream StudentQuestions);
+}
+
+message Empty{}
+
+message StudentQuestions{
+    repeated RestChatMessage message = 1;
 }
 
 message RestChatMessage {

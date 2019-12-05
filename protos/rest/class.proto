@@ -16,7 +16,7 @@ service RestPresenterClassService {
     rpc GetClass (ClassUuid) returns (RestClass);
     rpc GetClasses (Empty) returns (GetClassesResponse);
 
-    rpc StartClass (ClassUuid) returns (stream RestChatMessage);
+    rpc StartClass (ClassUuid) returns (ClassCode);
     rpc EndClass (ClassUuid) returns (RestStatus);
 }
 
@@ -71,6 +71,10 @@ message GetClassesResponse{
 message ClassWithUuid {
     int32 classUuid = 1;
     RestClass class = 2;
+}
+
+message ClassCode{
+    string code = 1;
 }
 
 message Empty{}

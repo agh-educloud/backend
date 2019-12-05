@@ -56,6 +56,7 @@ func Start() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/class", createClass).Methods("POST")
 	router.HandleFunc("/class/{id}", getClass).Methods("GET")
+	router.HandleFunc("/quizStatistics/{id}", getQuizStatistics).Methods("GET")
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
 	router.HandleFunc("/class/{id}", startClass).Methods("POST")
@@ -95,6 +96,27 @@ func getAllClasses(writer http.ResponseWriter, request *http.Request) {
 	_ = json.NewEncoder(writer).Encode(response)
 
 }
+func getQuizStatistics(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+	var questionUuid = mux.Vars(request)["id"]
+
+	// For testing purpose only
+	var questionUuidInt, _ = strconv.ParseInt(questionUuid, 10, 32)
+
+	//class_commons.Statistics[questionUuid] = web_gen.QuizQuestionStatistics{
+	//	QuestionUuid:               int32(questionUuidInt),
+	//	PercentageOfCorrectAnswers: 24.2,
+	//	Participants:               10,
+	//}
+
+	if len(class_commons.Statistics) > int(questionUuidInt) {
+		writer.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(writer).Encode(class_commons.Statistics[questionUuidInt])
+	} else {
+		writer.WriteHeader(http.StatusNotFound)
+	}
+}
+
 func getClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 	var classUuid = mux.Vars(request)["id"]
@@ -126,7 +148,6 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println("Error while unmarshal")
 	}
 	log.Println(class.Name)
-	//log.Println(class.QuizQuestion[0].Question.Option[0])
 
 	var nextUuid = int32(len(webCreatedClasses) + 1)
 
@@ -232,7 +253,7 @@ func delegateQuizQuestion(writer http.ResponseWriter, request *http.Request) {
 				if q.Uuid == quizId.Uuid {
 					writer.WriteHeader(http.StatusOK)
 					possibleAnswers := getPossibleAnswers(q.Question.Option)
-					quiz.SendClosedQuestion(classUuid, possibleAnswers, q.Question.Answer.Value, true, 1)
+					quiz.SendClosedQuestion(classUuid, quizId.Uuid, possibleAnswers, q.Question.Answer.Value, true, 1)
 					return
 				}
 			}
