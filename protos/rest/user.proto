@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-option go_package = "educloud-web";
-
-message RestUser {
-    string uuid = 1;
-    string name = 2;
-}
