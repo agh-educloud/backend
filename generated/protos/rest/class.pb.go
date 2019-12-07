@@ -183,8 +183,8 @@ func (m *QuizQuestionCreation) GetQuestion() *RestQuizQuestion {
 
 type RestQuizQuestion struct {
 	Question             string        `protobuf:"bytes,1,opt,name=question,proto3" json:"1,omitempty"`
-	Option               []*RestOption `protobuf:"bytes,3,rep,name=option,proto3" json:"2,omitempty"`
-	Hint                 string        `protobuf:"bytes,2,opt,name=hint,proto3" json:"3,omitempty"`
+	Option               []*RestOption `protobuf:"bytes,3,rep,name=option,proto3" json:"3,omitempty"`
+	Hint                 string        `protobuf:"bytes,2,opt,name=hint,proto3" json:"2,omitempty"`
 	Answer               *RestOption   `protobuf:"bytes,4,opt,name=answer,proto3" json:"4,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -464,7 +464,7 @@ func (m *ClassUuid) GetClassUuid() int32 {
 }
 
 type GetClassesResponse struct {
-	Classes              []*ClassWithUuid `protobuf:"bytes,1,rep,name=classes,proto3" json:"2,omitempty"`
+	Classes              []*ClassWithUuid `protobuf:"bytes,1,rep,name=classes,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`

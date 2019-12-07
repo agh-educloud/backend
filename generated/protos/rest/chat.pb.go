@@ -56,7 +56,7 @@ func (m *Empty) XXX_DiscardUnknown() {
 var xxx_messageInfo_Empty proto.InternalMessageInfo
 
 type StudentQuestions struct {
-	Message              []*RestChatMessage `protobuf:"bytes,1,rep,name=message,proto3" json:"message,omitempty"`
+	Message              []*RestChatMessage `protobuf:"bytes,1,rep,name=message,proto3" json:"1,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`

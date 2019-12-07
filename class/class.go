@@ -57,6 +57,7 @@ func Start() {
 	router.HandleFunc("/class", createClass).Methods("POST")
 	router.HandleFunc("/class/{id}", getClass).Methods("GET")
 	router.HandleFunc("/quizStatistics/{id}", getQuizStatistics).Methods("GET")
+	router.HandleFunc("/studentsQuestion/{id}", getStudentsQuestion).Methods("GET")
 	router.HandleFunc("/quizHistoryStatistics/{id}", getQuizHistoryStatistics).Methods("GET")
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
@@ -112,6 +113,24 @@ func getQuizStatistics(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
+func getStudentsQuestion(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+	//var classUuid = mux.Vars(request)["id"]
+
+	var messages = []*web_gen.RestChatMessage{{
+		Message: &web_gen.RestMessage{
+			Content: "xd",
+		},
+	}}
+
+	var res = web_gen.StudentQuestions{
+		Message: messages,
+	}
+
+	writer.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(writer).Encode(res)
+}
+
 func getQuizHistoryStatistics(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 	var classUuid = mux.Vars(request)["id"]
@@ -120,7 +139,7 @@ func getQuizHistoryStatistics(writer http.ResponseWriter, request *http.Request)
 
 	if len(class_commons.PresentationHistoryData) > int(classUuidInt) {
 		writer.WriteHeader(http.StatusOK)
-		_ = json.NewEncoder(writer).Encode(class_commons.PresentationHistoryData[classUuid])
+		_ = json.NewEncoder(writer).Encode(class_commons.PresentationHistoryData[int32(classUuidInt)])
 	} else {
 		writer.WriteHeader(http.StatusNotFound)
 	}
@@ -157,6 +176,7 @@ func createClass(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println("Error while unmarshal")
 	}
 	log.Println(class.Name)
+	log.Println(class.QuizQuestion)
 
 	var nextUuid = int32(len(webCreatedClasses) + 1)
 

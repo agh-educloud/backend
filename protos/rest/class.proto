@@ -24,7 +24,7 @@ message RestClass {
     string topic = 2;
     repeated QuizQuestionCreation quizQuestion = 3;
     repeated QuizQuestionCreation openQuizQuestion = 4;
-    bytes presentation = 6;
+    bytes presentation = 5;
 }
 
 message QuizzesHistoryStatistics {
