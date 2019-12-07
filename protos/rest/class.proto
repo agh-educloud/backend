@@ -16,7 +16,7 @@ service RestPresenterClassService {
     rpc GetClass (ClassUuid) returns (RestClass);
     rpc GetClasses (Empty) returns (GetClassesResponse);
 
-    rpc StartClass (ClassUuid) returns (stream RestChatMessage);
+    rpc StartClass (ClassUuid) returns (ClassCode);
     rpc EndClass (ClassUuid) returns (RestStatus);
 }
 
@@ -24,9 +24,25 @@ service RestPresenterClassService {
 message RestClass {
     string name = 1;
     string topic = 2;
-    repeated RestQuizQuestion quizQuestion = 3;
+    repeated QuizQuestionCreation quizQuestion = 3;
     repeated RestHomework homework = 4;
     bytes presentation = 5;
+}
+
+message QuizQuestionCreation {
+    int32 uuid = 1;
+    RestQuizQuestion question = 2;
+}
+
+message RestQuizQuestion {
+    string question = 1;
+    repeated RestOption option = 3;
+    string hint = 2;
+    RestOption answer = 4;
+}
+
+message RestOption {
+    string value = 1;
 }
 
 message ClassCreationRequest {
@@ -55,6 +71,10 @@ message GetClassesResponse{
 message ClassWithUuid {
     int32 classUuid = 1;
     RestClass class = 2;
+}
+
+message ClassCode{
+    string code = 1;
 }
 
 message Empty{}

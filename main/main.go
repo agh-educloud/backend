@@ -25,7 +25,7 @@ func main() {
 	go feedback.StartServer()
 
 	wg.Add(5)
-	go class.Start()
+	class.Start()
 
 	wg.Add(6)
 	go quiz.StartServer()
