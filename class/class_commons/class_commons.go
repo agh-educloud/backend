@@ -10,3 +10,5 @@ var AllStudentsInClass = make(map[string][]string)
 
 // TODO lock this array
 var Statistics []web_gen.QuizQuestionStatistics
+
+var PresentationHistoryData = make(map[int32][]web_gen.QuizQuestionStatistics)

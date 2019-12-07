@@ -3,6 +3,7 @@ package quiz
 import (
 	"../class/class_commons"
 	. "../generated/protos/grpc"
+	web_gen "../generated/protos/rest"
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -16,6 +17,7 @@ var StudentQuizStream = make(map[string]QuizService_WaitForQuestionsServer)
 var StudentCorrectAnswer = make(map[string]string)
 var StudentPhotoAnswer = make(map[string]string)
 
+var currentQuizId = int32(0)
 var mutex = &sync.Mutex{}
 
 type quizServiceServer struct{}
@@ -34,6 +36,7 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 	if _, ok := StudentCorrectAnswer[answer.UserId]; ok {
 		var expectedAnswer = StudentCorrectAnswer[answer.UserId]
 		if expectedAnswer == answer.Answer {
+			go updateStatistics()
 			return &Status{Code: Status_OK}, nil
 		}
 		if strings.HasPrefix(answer.Answer, "http") {
@@ -44,8 +47,24 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 	return &Status{Code: Status_DENIED}, nil
 }
 
-func SendClosedQuestion(classId string, possibleAnswers []string, correctAnswer string, assignToSubGroup bool, numberOfGroups int) {
+func updateStatistics() {
+	quizStats := class_commons.Statistics[currentQuizId]
+	correctAnswersNumber := float32(quizStats.Participants)*quizStats.PercentageOfCorrectAnswers + 1
+	quizStats.Participants += 1
+	quizStats.PercentageOfCorrectAnswers = correctAnswersNumber / float32(quizStats.Participants)
+	class_commons.Statistics[currentQuizId] = quizStats
+}
+
+func SendClosedQuestion(classId string, quizId int32, possibleAnswers []string, correctAnswer string, assignToSubGroup bool, numberOfGroups int) {
 	var students = class_commons.AllStudentsInClass[classId]
+	currentQuizId = quizId
+	class_commons.Statistics = append(class_commons.Statistics, web_gen.QuizQuestionStatistics{
+		QuestionUuid:               quizId,
+		PercentageOfCorrectAnswers: 0.0,
+		Participants:               0,
+	})
+
+	println("Sending closed question")
 
 	for index, student := range students {
 		StudentCorrectAnswer[student] = correctAnswer

@@ -57,9 +57,11 @@ func Start() {
 	router.HandleFunc("/class", createClass).Methods("POST")
 	router.HandleFunc("/class/{id}", getClass).Methods("GET")
 	router.HandleFunc("/quizStatistics/{id}", getQuizStatistics).Methods("GET")
+	router.HandleFunc("/quizHistoryStatistics/{id}", getQuizHistoryStatistics).Methods("GET")
 	router.HandleFunc("/class", getAllClasses).Methods("GET")
 	router.HandleFunc("/class/{id}", updateClass).Methods("PATCH")
-	router.HandleFunc("/class/{id}", startClass).Methods("POST")
+	router.HandleFunc("/startClass/{id}", startClass).Methods("POST")
+	router.HandleFunc("/endClass/{id}", endClass).Methods("POST")
 	router.HandleFunc("/quizToDelegate/{id}", delegateQuizQuestion).Methods("POST")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
 	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
@@ -100,18 +102,25 @@ func getQuizStatistics(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 	var questionUuid = mux.Vars(request)["id"]
 
-	// For testing purpose only
 	var questionUuidInt, _ = strconv.ParseInt(questionUuid, 10, 32)
-
-	//class_commons.Statistics[questionUuid] = web_gen.QuizQuestionStatistics{
-	//	QuestionUuid:               int32(questionUuidInt),
-	//	PercentageOfCorrectAnswers: 24.2,
-	//	Participants:               10,
-	//}
 
 	if len(class_commons.Statistics) > int(questionUuidInt) {
 		writer.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(writer).Encode(class_commons.Statistics[questionUuidInt])
+	} else {
+		writer.WriteHeader(http.StatusNotFound)
+	}
+}
+
+func getQuizHistoryStatistics(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+	var classUuid = mux.Vars(request)["id"]
+
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
+
+	if len(class_commons.PresentationHistoryData) > int(classUuidInt) {
+		writer.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(writer).Encode(class_commons.PresentationHistoryData[classUuid])
 	} else {
 		writer.WriteHeader(http.StatusNotFound)
 	}
@@ -212,7 +221,7 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 func startClass(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 
-	log.Println("Starting class method")
+	log.Println("Starting class")
 
 	var classUuid = mux.Vars(request)["id"]
 	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
@@ -224,6 +233,26 @@ func startClass(writer http.ResponseWriter, request *http.Request) {
 			class_commons.CodesToClassUuid[code] = classUuid
 			class_commons.ClassUuidToCode[classUuid] = code
 			log.Println("Created secret code for class " + classUuid + " : " + code)
+			return
+		}
+	}
+
+	writer.WriteHeader(http.StatusBadRequest)
+}
+
+func endClass(writer http.ResponseWriter, request *http.Request) {
+	enableCors(&writer)
+
+	log.Println("End class")
+
+	var classUuid = mux.Vars(request)["id"]
+	var classUuidInt, _ = strconv.ParseInt(classUuid, 10, 32)
+
+	for _, v := range webCreatedClasses {
+		if v.ClassUuid == int32(classUuidInt) {
+			writer.WriteHeader(http.StatusOK)
+			class_commons.PresentationHistoryData[int32(classUuidInt)] = class_commons.Statistics
+			class_commons.Statistics = nil
 			return
 		}
 	}
