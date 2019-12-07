@@ -12,3 +12,5 @@ var AllStudentsInClass = make(map[string][]string)
 var Statistics []web_gen.QuizQuestionStatistics
 
 var PresentationHistoryData = make(map[int32][]web_gen.QuizQuestionStatistics)
+
+var MessagesToPresenter []*web_gen.RestChatMessage
