@@ -1,7 +1,9 @@
 package chat
 
 import (
+	class "../class/class_commons"
 	. "../generated/protos/grpc"
+	web_gen "../generated/protos/rest"
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -20,6 +22,14 @@ func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessag
 		_ = stream.Send(message)
 	}
 	println("Message -> ", message.Message.Content)
+	//Question to presenter
+	if message.Code == "2" {
+		class.MessagesToPresenter = append(class.MessagesToPresenter, &web_gen.RestChatMessage{
+			Message: &web_gen.RestMessage{
+				Content: message.Message.Content,
+			},
+		})
+	}
 	return &Status{}, nil
 }
 

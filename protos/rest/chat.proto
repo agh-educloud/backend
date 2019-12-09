@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "user.proto";
-
 service RestChatService {
     rpc GetStudentQuestions (Empty) returns (stream StudentQuestions);
 }
@@ -13,9 +11,8 @@ message StudentQuestions{
 }
 
 message RestChatMessage {
-    RestUser sender = 1;
-    RestMessage message = 2;
-    string code = 3;
+    RestMessage message = 1;
+    string code = 2;
 }
 
 message RestMessage {

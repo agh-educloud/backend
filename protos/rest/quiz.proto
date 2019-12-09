@@ -1,12 +1,11 @@
 syntax = "proto3";
 
-option go_package = "educloud-web";
-
-import "protos/rest/status.proto";
+import "status.proto";
 
 service PresenterQuizService{
     rpc DelegateQuizQuestion (RestQuizQuestionUuid) returns (RestStatus);
     rpc GetQuizQuestionStatistics (RestQuizQuestionUuid) returns (stream QuizQuestionStatistics);
+    rpc GetOpenQuizQuestionAnswers (RestQuizQuestionUuid) returns (stream QuizQuestionStatistics);
 }
 
 message RestQuizQuestionUuid {
@@ -19,3 +18,6 @@ message QuizQuestionStatistics{
     int32 participants = 3;
 }
 
+message OpenQuizQuestionAnswers{
+    repeated string url = 1;
+}
