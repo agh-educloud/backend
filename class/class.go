@@ -66,7 +66,7 @@ func Start() {
 	router.HandleFunc("/endClass/{id}", endClass).Methods("POST")
 	router.HandleFunc("/quizToDelegate/{id}", delegateQuizQuestion).Methods("POST")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
-	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
+	log.Fatal(http.ListenAndServe("192.168.43.114:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
 
 func enableCors(w *http.ResponseWriter) {
@@ -324,7 +324,16 @@ func delegateQuizQuestion(writer http.ResponseWriter, request *http.Request) {
 				if q.Uuid == quizId.Uuid {
 					writer.WriteHeader(http.StatusOK)
 					possibleAnswers := getPossibleAnswers(q.Question.Option)
-					quiz.SendClosedQuestion(classUuid, quizId.Uuid, possibleAnswers, q.Question.Answer.Value, true, 1)
+
+					println("classUUId", classUuid)
+					println("quizId.Uuid", quizId.Uuid)
+					println("possibleAnswers", possibleAnswers)
+					println(q.Question.Answer.Value)
+					if len(possibleAnswers) == 0 {
+						quiz.SendPhotoQuestion(classUuid, true, 1)
+					} else {
+						quiz.SendClosedQuestion(classUuid, quizId.Uuid, possibleAnswers, q.Question.Answer.Value, true, 1)
+					}
 					return
 				}
 			}

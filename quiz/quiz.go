@@ -23,18 +23,22 @@ var mutex = &sync.Mutex{}
 type quizServiceServer struct{}
 
 func (s *quizServiceServer) WaitForQuestions(request *QuizRequest, stream QuizService_WaitForQuestionsServer) error {
+	println("JOINED QUIZ")
 	mutex.Lock()
 	StudentQuizStream[request.UserId] = stream
 	mutex.Unlock()
-
 	time.Sleep(24 * time.Hour)
 
 	return nil
 }
 
 func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnswer) (*Status, error) {
+	println("XDDD")
+
 	if _, ok := StudentCorrectAnswer[answer.UserId]; ok {
 		var expectedAnswer = StudentCorrectAnswer[answer.UserId]
+		println("EXPECTED ANSWER", expectedAnswer)
+
 		if expectedAnswer == answer.Answer {
 			go updateStatistics()
 			return &Status{Code: Status_OK}, nil
@@ -68,14 +72,23 @@ func SendClosedQuestion(classId string, quizId int32, possibleAnswers []string, 
 
 	for index, student := range students {
 		StudentCorrectAnswer[student] = correctAnswer
+
+		println("CORRECT ANSWER", correctAnswer)
 		var stream = StudentQuizStream[student]
+
 		if assignToSubGroup {
-			_ = stream.Send(&Question{
-				ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+			var result = stream.Send(&Question{ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				ClosedQuestion: true,
 				Answers:        possibleAnswers,
 				GroupId:        class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
+			//_ = Question{
+			//	ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+			//	ClosedQuestion: true,
+			//	Answers:        possibleAnswers,
+			//	GroupId:        class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
+			//}
+			println(result)
 		} else {
 			_ = stream.Send(&Question{
 				ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID

@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
@@ -23,7 +24,8 @@ func (s *chatServiceServer) SendMessage(ctx context.Context, message *ChatMessag
 	}
 	println("Message -> ", message.Message.Content)
 	//Question to presenter
-	if message.Code == "2" {
+	if strings.HasPrefix(message.Message.Content, "/zapytaj") {
+		println("Sending message to presenter")
 		class.MessagesToPresenter = append(class.MessagesToPresenter, &web_gen.RestChatMessage{
 			Message: &web_gen.RestMessage{
 				Content: message.Message.Content,
