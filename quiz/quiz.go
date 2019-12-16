@@ -34,18 +34,25 @@ func (s *quizServiceServer) WaitForQuestions(request *QuizRequest, stream QuizSe
 
 func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnswer) (*Status, error) {
 
+	if strings.HasPrefix(answer.Answer, "http") {
+		println(answer.Answer, answer.UserId)
+		StudentPhotoAnswer[answer.UserId] = string(answer.Answer)
+		return &Status{Code: Status_OK}, nil
+	}
+
 	if _, ok := StudentCorrectAnswer[answer.UserId]; ok {
 		var expectedAnswer = StudentCorrectAnswer[answer.UserId]
 		println("EXPECTED ANSWER", expectedAnswer)
 
-		if expectedAnswer == answer.Answer {
+		if expectedAnswer == answer.Answer && !strings.HasPrefix(answer.Answer, "http") {
 			go updateStatistics()
 			return &Status{Code: Status_OK}, nil
 		}
-		if strings.HasPrefix(answer.Answer, "http") {
-			StudentPhotoAnswer[answer.UserId] = answer.Answer
-			return &Status{Code: Status_OK}, nil
-		}
+		//if strings.HasPrefix(answer.Answer, "http") {
+		//	println(answer.Answer)
+		//	StudentPhotoAnswer[answer.UserId] = answer.Answer
+		//	return &Status{Code: Status_OK}, nil
+		//}
 	}
 	return &Status{Code: Status_DENIED}, nil
 }
@@ -98,6 +105,7 @@ func SendPhotoQuestion(classId string, assignToSubGroup bool, numberOfGroups int
 
 	for index, student := range students {
 		var stream = StudentQuizStream[student]
+		StudentCorrectAnswer[student] = "http"
 		if assignToSubGroup {
 			_ = stream.Send(&Question{
 				ClassId:       class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
