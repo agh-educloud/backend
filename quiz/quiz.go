@@ -45,8 +45,11 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 		println("EXPECTED ANSWER", expectedAnswer)
 
 		if expectedAnswer == answer.Answer && !strings.HasPrefix(answer.Answer, "http") {
-			go updateStatistics()
+			go updateStatistics(true)
 			return &Status{Code: Status_OK}, nil
+		} else if expectedAnswer != answer.Answer && !strings.HasPrefix(answer.Answer, "http") {
+			go updateStatistics(false)
+			return &Status{Code: Status_DENIED}, nil
 		}
 		//if strings.HasPrefix(answer.Answer, "http") {
 		//	println(answer.Answer)
@@ -57,12 +60,15 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 	return &Status{Code: Status_DENIED}, nil
 }
 
-func updateStatistics() {
+func updateStatistics(isAnswerCorrect bool) {
 	println("Updating stats!")
 	quizStats := class_commons.Statistics[currentQuizId]
-	correctAnswersNumber := float32(quizStats.Participants)*quizStats.PercentageOfCorrectAnswers + 1
+	correctAnswersNumber := int32(float32(quizStats.Participants) * quizStats.PercentageOfCorrectAnswers)
+	if isAnswerCorrect {
+		correctAnswersNumber += 1
+	}
 	quizStats.Participants += 1
-	quizStats.PercentageOfCorrectAnswers = correctAnswersNumber / float32(quizStats.Participants)
+	quizStats.PercentageOfCorrectAnswers = float32(correctAnswersNumber) / float32(quizStats.Participants)
 	class_commons.Statistics[currentQuizId] = quizStats
 }
 
