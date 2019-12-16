@@ -118,7 +118,10 @@ func getStudentsQuestion(writer http.ResponseWriter, request *http.Request) {
 	enableCors(&writer)
 
 	writer.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(writer).Encode(class_commons.MessagesToPresenter)
+	_ = json.NewEncoder(writer).Encode(
+		web_gen.StudentQuestions{
+			Message: class_commons.MessagesToPresenter,
+		})
 }
 
 func getQuizHistoryStatistics(writer http.ResponseWriter, request *http.Request) {
@@ -131,7 +134,7 @@ func getQuizHistoryStatistics(writer http.ResponseWriter, request *http.Request)
 	if len(class_commons.PresentationHistoryData) > int(classUuidInt) {
 		writer.WriteHeader(http.StatusOK)
 
-		statsList := []*web_gen.QuizQuestionStatistics{}
+		var statsList []*web_gen.QuizQuestionStatistics
 		for _, v := range class_commons.PresentationHistoryData[int32(classUuidInt)] {
 			statsList = append(statsList, &v)
 		}
@@ -328,7 +331,7 @@ func delegateQuizQuestion(writer http.ResponseWriter, request *http.Request) {
 					println("classUUId", classUuid)
 					println("quizId.Uuid", quizId.Uuid)
 					println("possibleAnswers", possibleAnswers)
-					println(q.Question.Answer.Value)
+					//println(q.Question.Answer.Value)
 					if len(possibleAnswers) == 0 {
 						quiz.SendPhotoQuestion(classUuid, true, 1)
 					} else {

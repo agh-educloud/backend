@@ -33,7 +33,6 @@ func (s *quizServiceServer) WaitForQuestions(request *QuizRequest, stream QuizSe
 }
 
 func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnswer) (*Status, error) {
-	println("XDDD")
 
 	if _, ok := StudentCorrectAnswer[answer.UserId]; ok {
 		var expectedAnswer = StudentCorrectAnswer[answer.UserId]
@@ -52,6 +51,7 @@ func (s *quizServiceServer) AnswerQuestion(ctx context.Context, answer *QuizAnsw
 }
 
 func updateStatistics() {
+	println("Updating stats!")
 	quizStats := class_commons.Statistics[currentQuizId]
 	correctAnswersNumber := float32(quizStats.Participants)*quizStats.PercentageOfCorrectAnswers + 1
 	quizStats.Participants += 1
@@ -77,17 +77,11 @@ func SendClosedQuestion(classId string, quizId int32, possibleAnswers []string, 
 		var stream = StudentQuizStream[student]
 
 		if assignToSubGroup {
-			var result = stream.Send(&Question{ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
+			var result = stream.Send(&Question{ClassId: class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
 				ClosedQuestion: true,
 				Answers:        possibleAnswers,
 				GroupId:        class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
 			})
-			//_ = Question{
-			//	ClassId:        class_commons.ClassUuidToCode[classId], //mobile uses SecretCode instead of ClassUUID
-			//	ClosedQuestion: true,
-			//	Answers:        possibleAnswers,
-			//	GroupId:        class_commons.ClassUuidToCode[classId] + string(index%numberOfGroups),
-			//}
 			println(result)
 		} else {
 			_ = stream.Send(&Question{
