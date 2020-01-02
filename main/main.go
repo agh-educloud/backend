@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	println("STARTING")
 	var wg sync.WaitGroup
 
 	wg.Add(1)
