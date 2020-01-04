@@ -17,6 +17,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var webCreatedClasses []*web_gen.ClassWithUuid
@@ -296,6 +297,27 @@ func endClass(writer http.ResponseWriter, request *http.Request) {
 	for _, v := range webCreatedClasses {
 		if v.ClassUuid == int32(classUuidInt) {
 			writer.WriteHeader(http.StatusOK)
+			if class_commons.PresentationHistoryData[int32(classUuidInt)] != nil {
+
+				currentTime := time.Now()
+
+				var prevClass = webCreatedClasses[classUuidInt].Class
+				class := web_gen.RestClass{
+					Name:             prevClass.Name + " " + currentTime.Format("2006-01-02 15:04:05"),
+					Topic:            prevClass.Topic,
+					QuizQuestion:     prevClass.QuizQuestion,
+					OpenQuizQuestion: prevClass.OpenQuizQuestion,
+				}
+				var nextUuid = int32(len(webCreatedClasses))
+
+				webCreatedClasses = append(webCreatedClasses, &web_gen.ClassWithUuid{
+					ClassUuid: nextUuid,
+					Class:     &class,
+				})
+
+				classUuidInt = int64(nextUuid)
+
+			}
 			class_commons.PresentationHistoryData[int32(classUuidInt)] = class_commons.Statistics
 			class_commons.Statistics = nil
 			return
