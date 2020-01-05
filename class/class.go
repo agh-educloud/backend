@@ -67,7 +67,7 @@ func Start() {
 	router.HandleFunc("/endClass/{id}", endClass).Methods("POST")
 	router.HandleFunc("/quizToDelegate/{id}", delegateQuizQuestion).Methods("POST")
 	router.HandleFunc("/class/{id}", deleteClass).Methods("DELETE")
-	log.Fatal(http.ListenAndServe("localhost:8080", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
+	log.Fatal(http.ListenAndServe("0.0.0.0:45766", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }
 
 func enableCors(w *http.ResponseWriter) {
