@@ -234,7 +234,6 @@ func updateClass(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println("Error while unmarshal")
 	}
 
-	//TODO more fields?
 	for _, v := range webCreatedClasses {
 		if v.ClassUuid == int32(classUuidInt) {
 			if len(class.Class.Name) > 0 {
@@ -296,7 +295,6 @@ func endClass(writer http.ResponseWriter, request *http.Request) {
 
 	for _, v := range webCreatedClasses {
 		if v.ClassUuid == int32(classUuidInt) {
-			writer.WriteHeader(http.StatusOK)
 			if class_commons.PresentationHistoryData[int32(classUuidInt)] != nil {
 
 				currentTime := time.Now()
@@ -320,6 +318,8 @@ func endClass(writer http.ResponseWriter, request *http.Request) {
 			}
 			class_commons.PresentationHistoryData[int32(classUuidInt)] = class_commons.Statistics
 			class_commons.Statistics = nil
+			class_commons.MessagesToPresenter = nil
+			writer.WriteHeader(http.StatusOK)
 			return
 		}
 	}
